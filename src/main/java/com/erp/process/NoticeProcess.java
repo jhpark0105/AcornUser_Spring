@@ -21,11 +21,8 @@ public class NoticeProcess {
 	@Autowired
 	private NoticeRepository noticeRepository;
 	
-	// 상단 고정 구분하여 페이징처리
+	// 상단에 고정할 중요 공지 구분하여 페이징처리
 	public Page<NoticeDto> selectAll(Pageable pageable){
-		// 전체 공지 수 계산
-	    long totalNoticeCount = noticeRepository.count();
-
 	    // 중요공지 전부 가져옴
 	    List<Notice> checkedNotice = noticeRepository.findByNoticeCheckOrderByNoticeNoDesc(true);
 	    int checkedNoticeCount = checkedNotice.size();
@@ -34,20 +31,27 @@ public class NoticeProcess {
 	    int pageSize = 10;
 	    
 	    // 일반 공지 페이징 계산
-	    int normalNoticeSize = pageSize - checkedNoticeCount;
-	    int normalNoticePage = pageable.getPageNumber();
+	    int normalNoticesPerPage = pageSize - checkedNoticeCount;
+	    int normalNoticePageNo = pageable.getPageNumber();
 	    
 	    // 일반공지를 페이징하여 가져옴
 	    Page<Notice> normalNotice = noticeRepository.findByNoticeCheckOrderByNoticeNoDesc(
-	        false, PageRequest.of(normalNoticePage, normalNoticeSize));
+	        false, PageRequest.of(normalNoticePageNo, normalNoticesPerPage));
+	    
+	    // 일반 공지 수 계산
+	    int normalNoticeCount = (int)normalNotice.getTotalElements();
+	    // 총 페이지 수 계산
+	    int totalPages = (int)Math.ceil((double)normalNoticeCount / normalNoticesPerPage);
+	    // 페이징처리를 위한 totalItems 계산
+	    int totalItems = normalNoticeCount + checkedNoticeCount * totalPages;
 
 	    List<NoticeDto> joinedNotice = new ArrayList<>();
 	    
-	    if(normalNotice.isEmpty() && pageable.getPageNumber() > 0) {
-			// 요청한 페이지에 일반공지가 없으면 빈 페이지를 반환. 중요공지밖에 없는 경우엔 페이지번호가 0이므로 else 블럭으로 이동
+	    if(pageable.getPageNumber() >= totalPages) {
+			// 페이지번호 요청한계 초과 시: 빈 페이지 반환
 			return new PageImpl<NoticeDto>(joinedNotice, pageable, 0);
 		} else {
-			// 중요 및 일반공지를 DTO로 변환하여 내용을 리스트에 추가
+			// 페이지번호 정상: 중요 및 일반공지를 DTO로 변환하여 내용을 리스트에 추가
 			joinedNotice.addAll(checkedNotice.stream()
 				.map(Notice::toDto).collect(Collectors.toList()));
 			joinedNotice.addAll(normalNotice.getContent().stream()
@@ -55,7 +59,7 @@ public class NoticeProcess {
 			
 			// 결합된 리스트와 페이징정보를 포함한 PageImpl객체 반환
 			return new PageImpl<NoticeDto>(joinedNotice, PageRequest.of(
-			    	pageable.getPageNumber(), pageSize), totalNoticeCount);
+			    	pageable.getPageNumber(), pageSize), totalItems);
 		}
 	}
 
@@ -73,7 +77,6 @@ public class NoticeProcess {
 			keyword, PageRequest.of(pageable.getPageNumber(), pageSize))
 				.map(Notice::toDto);
 	}
-
 
 	public List<NoticeDto> getCheckedNoticeList() {
 		return noticeRepository.getCheckedNoticeList()
