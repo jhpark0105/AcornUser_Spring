@@ -1,10 +1,13 @@
 package com.erp.process;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.erp.dto.MemberDto;
 import com.erp.entity.Member;
@@ -22,19 +25,29 @@ public class MemberProcess {
 				.collect(Collectors.toList());
 	}
 	
-	public String insert(MemberDto dto) {
+	@Transactional
+	public Map<String, Object> insert(MemberDto dto) {
 		// 입력한 번호 중복 확인 
+		 Map<String, Object> response = new HashMap<String, Object>() ;
 		try {
 			repository.findById(dto.getMemberId()).get();
-			return "이미 등록된 번호입니다.";
+			response.put("Success", false);
+			response.put("message", "이미 등록된 번호입니다.");
+			
+			return response;
 		} catch(Exception e) {
 			//  findById의 결과가 error인 경우 (등록가능)
 			try {
-				Member newData = MemberDto.toEntity(dto);
+				Member newData = Member.fromDto(dto);
 				repository.save(newData);
-				return "Success";
+				response.put("Success", true);
+				response.put("message", "직원을 등록하였습니다.");
+				
+				return response;
 			} catch (Exception e2) {
-				return "입력 자료 오류입니다." + e2;
+				response.put("Success", false);
+				response.put("message", "입력자료 오류 입니다."+e2);
+				return response;
 			}
 		}
 	}
@@ -46,9 +59,16 @@ public class MemberProcess {
 	}
 	
 	// 수정
+	@Transactional
 	public String update(MemberDto dto) {
 		try {
-			Member member = MemberDto.toEntity(dto);
+			Member member = new Member(dto.getMemberId(),
+					dto.getMemberName(),
+					dto.getMemberJob(),
+					dto.getMemberDate(),
+					dto.getMemberTel(),
+					dto.getMemberCnt(),
+					dto.getBranchCode());
 			repository.save(member);
 			return "Success";
 		}
@@ -58,6 +78,7 @@ public class MemberProcess {
 	}
 	
 	// 삭제
+	@Transactional
 	public String delete(String memberId) {
 		try {
 			repository.deleteById(memberId);
@@ -66,9 +87,9 @@ public class MemberProcess {
 			return "삭제 작업 오류입니다" + e.getMessage();
 		}
 	}
+	
+	
 }
-
-
 
 
 

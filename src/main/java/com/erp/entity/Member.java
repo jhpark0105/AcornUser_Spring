@@ -3,6 +3,7 @@ package com.erp.entity;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.erp.dto.MemberDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -47,8 +48,16 @@ public class Member {
 	@Column(name="branch_code")
 	private String branchCode;
 	
-	@OneToMany(mappedBy = "member",fetch = FetchType.EAGER)
-	@JsonBackReference
-	private List<Reservation> reservationList;
+	public static Member fromDto(MemberDto dto) {
+		return Member.builder()
+				.memberId(dto.getMemberId())
+				.memberName(dto.getMemberName())
+				.memberJob(dto.getMemberJob())
+				.memberDate(dto.getMemberDate())
+				.memberTel(dto.getMemberTel())
+				.memberCnt(dto.getMemberCnt())
+				.branchCode(dto.getBranchCode())
+				.build();
+	}
 	
 }
