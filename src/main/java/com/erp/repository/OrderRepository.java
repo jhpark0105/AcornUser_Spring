@@ -1,0 +1,13 @@
+package com.erp.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import com.erp.entity.Order;
+
+public interface OrderRepository extends JpaRepository<Order, Integer>{
+	@Query("SELECT o FROM Order o WHERE o.branch.branchCode=:branchCode")
+	Page<Order> getBranchOrders(Pageable pageable, @Param("branchCode") String branchCode);
+}
