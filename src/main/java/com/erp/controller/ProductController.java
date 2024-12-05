@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +27,8 @@ import com.erp.process.ProductProcess;
 public class ProductController {
 	@Autowired
     private ProductProcess productProcess;
-    
-    //대분류 목록 불러오기
+	
+	//대분류 목록 불러오기
     @GetMapping("/productB")
     public List<ProductBDto> listBProcess() {
         return productProcess.getBProductAll();
@@ -40,21 +41,17 @@ public class ProductController {
   	}
 
     //대분류 추가
-    @PostMapping("/productB")
-    public Map<String, Object> insertBProcess(@RequestBody ProductBDto productBDto) {
-    	productProcess.insertBProduct(productBDto);
-        
-    	Map<String, Object> map = new HashMap<>();
-		
-		map.put("isSuccess", true);
-		
-		return map;
-    }
+  	@PostMapping("/productB")
+  	public Map<String, Object> insertBProcess(@RequestBody ProductBDto productBDto) {
+  	    Map<String, Object> response = productProcess.insertBProduct(productBDto);
+  	    
+  	    return response;
+  	}
     
     //대분류 삭제
     @DeleteMapping("/productB/{productBCode}")
     public Map<String, Object> deleteBProcess(@PathVariable("productBCode") String productBCode) {
-        productProcess.deleteBProduct(productBCode);
+    	productProcess.deleteBProduct(productBCode);
         
         Map<String, Object> map = new HashMap<>();
         
@@ -62,8 +59,6 @@ public class ProductController {
         
         return map;
     }
-    
-    //---------------------------------------------------------------------------------------------
     
     //소분류 목록 불러오기
     @GetMapping("/product")
@@ -82,15 +77,20 @@ public class ProductController {
         
         return ProductDto.fromEntity(product);
     }
+    
+    //대분류 목록 불러오기
+    @GetMapping("/product/product-b")
+    public ResponseEntity<List<Product_B>> getProductBList() {
+        List<Product_B> productBs = productProcess.getProductBList();
+        return ResponseEntity.ok(productBs);
+    }
 
     //소분류 추가
     @PostMapping("/product")
     public Map<String, Object> insertProcess(@RequestBody ProductDto productDto) {
-        productProcess.insertProduct(productDto);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("isSuccess", true);
-        return map;
+    	Map<String, Object> response = productProcess.insertProduct(productDto);
+    	
+        return response;
     }
     
     //소분류 수정
