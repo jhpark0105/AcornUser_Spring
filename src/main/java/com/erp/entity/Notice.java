@@ -23,33 +23,23 @@ import lombok.NoArgsConstructor;
 public class Notice {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-	private int noticeNo;
+	private int noticeNo; // 공지 번호
 	
 	@Column(length = 50, nullable = false)
-	private String noticeTitle;
+	private String noticeTitle; // 공지 제목
 	
 	@Column(length = 1000, nullable = false)
-	private String noticeContent;
+	private String noticeContent; // 공지 내용
 	
 	@Column(nullable = false, updatable = false)
-	private LocalDate noticeReg;
+	private LocalDate noticeReg; // 공지 작성일
 	
 	@Column(nullable = false, columnDefinition = "tinyint(1) default 0")
-	private boolean noticeCheck;
+	private boolean noticeCheck; // 공지 중요여부
 	
 	@PrePersist // persist되기 전에 자동호출되어 당일 날짜정보 저장
 	protected void onCreate() {
 		noticeReg = LocalDate.now();
-	}
-	
-	// Dto -> Entity
-	public static Notice of(NoticeDto dto) {
-		return Notice.builder()
-			.noticeNo(dto.getNoticeNo())
-			.noticeTitle(dto.getNoticeTitle())
-			.noticeContent(dto.getNoticeTitle())
-			.noticeReg(dto.getNoticeReg())
-			.noticeCheck(dto.isNoticeCheck()).build();
 	}
 	
 	// Entity -> Dto

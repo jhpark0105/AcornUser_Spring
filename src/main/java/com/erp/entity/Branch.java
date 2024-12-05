@@ -24,6 +24,7 @@ public class Branch {
 	private String branchTel;
 	private String branchAddress;
 	private String branchNote;
+	private String branchRole;
 	
 	// toEntity
 	public static Branch toEntity(BranchDto dto) {

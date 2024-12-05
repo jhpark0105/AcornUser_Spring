@@ -31,16 +31,4 @@ public class MemberDto {
 				.branchCode(member.getBranchCode())
 				.build();
 	}
-
-	public static Member toEntity (MemberDto dto) {
-		return Member.builder()
-				.memberId(dto.getMemberId())
-				.memberName(dto.getMemberName())
-				.memberJob(dto.getMemberJob())
-				.memberDate(dto.getMemberDate())
-				.memberTel(dto.getMemberTel())
-				.memberCnt(dto.getMemberCnt())
-				.branchCode(dto.getBranchCode())
-				.build();
-	}
 }

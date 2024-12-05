@@ -30,4 +30,18 @@ public class BranchDto {
 				.build();
 	}
 	
+	private String branchRole;
+	
+	// toDto
+	public static BranchDto toDto(Branch branch) {
+		return BranchDto.builder()
+				.branchCode(branch.getBranchCode())
+				.branchPw(branch.getBranchPw())
+				.branchName(branch.getBranchName())
+				.branchTel(branch.getBranchTel())
+				.branchAddress(branch.getBranchAddress())
+				.branchNote(branch.getBranchNote())
+				.branchRole(branch.getBranchRole())
+				.build();
+	}
 }

@@ -1,6 +1,7 @@
 package com.erp.entity;
 
 import com.erp.dto.AdminDto;
+import com.erp.dto.SignUpRequestDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -22,6 +23,7 @@ public class Admin {
 	private String adminPw;
 	private String adminRole;
 	private String adminName;
+	private String adminEmail;
 	private String adminBirth;
 	private String adminPhone;
 	private String adminPostcode;
@@ -40,6 +42,7 @@ public class Admin {
 				.adminName(dto.getAdminName())
 				.adminBirth(dto.getAdminBirth())
 				.adminPhone(dto.getAdminPhone())
+				.adminEmail(dto.getAdminEmail())
 				.adminPostcode(dto.getAdminPostcode())
 				.adminAddress1(dto.getAdminAddress1())
 				.adminAddress2(dto.getAdminAddress2())
@@ -47,5 +50,20 @@ public class Admin {
 				.adminTerm2(dto.getAdminTerm2())
 				.adminTerm3(dto.getAdminTerm3())
 				.build();
+	}
+	
+	public Admin(SignUpRequestDto dto) {
+		this.adminId = dto.getAdminId();
+		this.adminPw = dto.getAdminPw();
+		this.adminName = dto.getAdminName();
+		this.adminBirth = dto.getAdminBirth();
+		this.adminPhone = dto.getAdminPhone();
+		this.adminEmail = dto.getAdminEmail();
+		this.adminPostcode = dto.getAdminPostcode();
+		this.adminAddress1 = dto.getAdminAddress1();
+		this.adminAddress2 = dto.getAdminAddress2();
+		this.adminTerm1 = dto.getAdminTerm1();
+		this.adminTerm2 = dto.getAdminTerm2();
+		this.adminTerm3 = dto.getAdminTerm3();		
 	}
 }

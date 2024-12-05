@@ -1,5 +1,6 @@
 package com.erp.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -19,15 +20,16 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Reservation {
 	@Id
+	@Column(name="reservation_no")
 	private int reservationNo;
-	
+	@Column(name="reservation_date")
 	private String reservationDate;
-	
+	@Column(name="reservation_time")
 	private String reservationTime;
-	
+	@Column(name="reservation_comm")
 	private String reservationComm;
-	
-	private String branchCode;
+//	@Column(name="branch_code")
+//	private String branchCode;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "customerId")
