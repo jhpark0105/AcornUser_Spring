@@ -29,7 +29,7 @@ public class SecurityConfig {
 
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-		
+		// 수정
 		httpSecurity
 			.cors().and()
 			.csrf().disable()
