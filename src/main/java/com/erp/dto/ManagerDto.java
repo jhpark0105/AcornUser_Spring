@@ -18,11 +18,13 @@ public class ManagerDto {
     private String managerName;
     private String managerTel;
     private String managerMail;
+    private String branchName;
     
     // Entity -> DTO 변환 메서드
     public static ManagerDto fromEntity(Manager manager) {
         return ManagerDto.builder()
-                .branchCode(manager.getBranch().getBranchCode()) 
+                .branchCode(manager.getBranch().getBranchCode())
+                .branchName(manager.getBranch().getBranchName())
                 .managerName(manager.getManagerName())
                 .managerTel(manager.getManagerTel())
                 .managerMail(manager.getManagerMail())
