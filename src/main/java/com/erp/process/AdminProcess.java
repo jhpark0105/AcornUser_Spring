@@ -1,7 +1,6 @@
 package com.erp.process;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,19 +62,21 @@ public class AdminProcess {
 		Admin admin = adminRepository.findByAdminId(adminId);
 		if (admin == null) {
 	        throw new IllegalArgumentException("어드민 계정이 없습니다.");
-	    }
-		admin.setAdminPw(bCryptPasswordEncoder.encode(dto.getAdminPw()));
-		admin.setAdminName(dto.getAdminName());
-		admin.setAdminBirth(dto.getAdminBirth());
-		admin.setAdminPhone(dto.getAdminPhone());
-		admin.setAdminPostcode(dto.getAdminPostcode());
-		admin.setAdminAddress1(dto.getAdminAddress1());
-		admin.setAdminAddress2(dto.getAdminAddress2());
-		admin.setAdminTerm1(dto.getAdminTerm1());
-		admin.setAdminTerm2(dto.getAdminTerm2());
-		admin.setAdminTerm3(dto.getAdminTerm3());
-		adminRepository.save(admin);
-	}
+		}
+	        admin.setAdminPw(bCryptPasswordEncoder.encode(dto.getAdminPw()));
+	        admin.setAdminName(dto.getAdminName());
+	        admin.setAdminBirth(dto.getAdminBirth());
+	        admin.setAdminPhone(dto.getAdminPhone());
+	        admin.setAdminEmail(dto.getAdminEmail());
+	        admin.setAdminPostcode(dto.getAdminPostcode());
+	        admin.setAdminAddress1(dto.getAdminAddress1());
+	        admin.setAdminAddress2(dto.getAdminAddress2());
+	        admin.setAdminTerm1(dto.getAdminTerm1());
+	        admin.setAdminTerm2(dto.getAdminTerm2());
+	        admin.setAdminTerm3(dto.getAdminTerm3());
+	        adminRepository.save(admin);
+		}
+
 	
 	// 삭제
 	public void delete(String adminId) {
