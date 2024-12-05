@@ -1,6 +1,7 @@
 package com.erp.process;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,22 @@ public class ReservationProcess {
 	public List<Reservation> getData(){
 		return reservationRepository.findAll();
 	}
+	
+//	public List<ReservationDto> getData() {
+//	    List<Reservation> reservations = reservationRepository.findAll();  // Reservation 엔티티 목록 조회
+//	    return reservations.stream()
+//	            .map(ReservationDto::fromEntity)  // Reservation 엔티티를 ReservationDto로 변환
+//	            .collect(Collectors.toList());  // List로 변환
+//	}
+	
+//	public List<Reservation> getData(){
+//		return reservationRepository.findAllWithDetails();
+//	}
+	
+//	public List<Reservation> getData(){
+//		return reservationRepository.findReservationDataWithDetails();
+//	}
+	
 	// 고객 데이터 조회
 	public List<CustomerDto> getCustomerData() {
 	    List<Customer> customers = customerRepository.findAll();
@@ -62,7 +79,7 @@ public class ReservationProcess {
     public String insertReservation(ReservationDto reservationDto) {
 		try {
 		// Name으로 ID 조회
-		Integer customerId = reservationRepository.findCustomerIdByName(reservationDto.getCustomerName());
+		int customerId = reservationRepository.findCustomerIdByName(reservationDto.getCustomerName());
         String serviceCode = reservationRepository.findServiceCodeByName(reservationDto.getServiceName());
         String memberId = reservationRepository.findMemberIdByName(reservationDto.getMemberName());
         
@@ -103,30 +120,33 @@ public class ReservationProcess {
         reservationRepository.incrementMemberCount(memberId);
 
         // 서비스 가격 조회
-        Integer servicePrice = reservationRepository.findServicePriceByCode(serviceCode);
+        int servicePrice = reservationRepository.findServicePriceByCode(serviceCode);
         
         // 고객 총 결제 금액 증가
         reservationRepository.incrementCustomerTotal(customerId, servicePrice);
         
         return "isSuccess";
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "추가 작업 오류 : " + e.getMessage();
 		}
         
     }
+    
+   
 	
 	
 	//삭제
 	@Transactional
-	public String delete(Integer reservationNo) {
+	public String delete(int reservationNo) {
 		try {
             //id 조회
-			Integer customerId = reservationRepository.findCustomerIdByReservationNo(reservationNo);
+			int customerId = reservationRepository.findCustomerIdByReservationNo(reservationNo);
             String serviceCode = reservationRepository.findServiceCodeByReservationNo(reservationNo);
             String memberId = reservationRepository.findMemberIdByReservationNo(reservationNo);			
 
             //서비스 가격 조회
-            Integer servicePrice = reservationRepository.findServicePriceByCode(serviceCode);
+            int servicePrice = reservationRepository.findServicePriceByCode(serviceCode);
            
             //예약 삭제
             reservationRepository.deleteById(reservationNo);
@@ -149,18 +169,18 @@ public class ReservationProcess {
 	public String update(ReservationDto reservationDto) {
 	    try {
 	        // 기존 예약 정보 조회
-	    	Integer oldCustomerId = reservationRepository.findCustomerIdByReservationNo(reservationDto.getReservationNo());
+	    	int oldCustomerId = reservationRepository.findCustomerIdByReservationNo(reservationDto.getReservationNo());
 	        String oldServiceCode = reservationRepository.findServiceCodeByReservationNo(reservationDto.getReservationNo());
 	        String oldMemberId = reservationRepository.findMemberIdByReservationNo(reservationDto.getReservationNo());
 
 	        // 새로운 정보 조회
-	        Integer newCustomerId = reservationRepository.findCustomerIdByName(reservationDto.getCustomerName());
+	        int newCustomerId = reservationRepository.findCustomerIdByName(reservationDto.getCustomerName());
 	        String newServiceCode = reservationRepository.findServiceCodeByName(reservationDto.getServiceName());
 	        String newMemberId = reservationRepository.findMemberIdByName(reservationDto.getMemberName());
-	        Integer newServicePrice = reservationRepository.findServicePriceByCode(newServiceCode);
+	        int newServicePrice = reservationRepository.findServicePriceByCode(newServiceCode);
 
 	        // 기존 서비스 가격 조회
-	        Integer oldServicePrice = reservationRepository.findServicePriceByCode(oldServiceCode);
+	        int oldServicePrice = reservationRepository.findServicePriceByCode(oldServiceCode);
 
 	        // 고객 총 결제 금액 수정
 	        if (oldCustomerId != newCustomerId) {
@@ -220,4 +240,133 @@ public class ReservationProcess {
 	        return "수정 작업 오류 : " + e.getMessage();
 	    }
 	}
+	
+//	@Transactional
+//	public String update(ReservationDto reservationDto) {
+//	    try {
+//	    	int customerId = reservationRepository.findCustomerIdByReservationNo(reservationDto.getReservationNo());
+//	        String serviceCode = reservationRepository.findServiceCodeByReservationNo(reservationDto.getReservationNo());
+//	        String memberId = reservationRepository.findMemberIdByReservationNo(reservationDto.getReservationNo());
+//
+//	        // 기존 서비스 가격 조회
+//	        int servicePrice = reservationRepository.findServicePriceByCode(serviceCode);
+//
+//	        // 예약 정보 업데이트
+//	        Customer customer = new Customer();
+//	        customer.setCustomerId(customerId);
+//
+//	        Service service = new Service();
+//	        service.setServiceCode(serviceCode);
+//
+//	        Member member = new Member();
+//	        member.setMemberId(memberId);
+//
+//	        Reservation reservation = Reservation.builder()
+//	                .reservationNo(reservationDto.getReservationNo())
+//	                .reservationDate(reservationDto.getReservationDate())
+//	                .reservationTime(reservationDto.getReservationTime())
+//	                .reservationComm(reservationDto.getReservationComm())
+//	                .customer(customer)
+//	                .service(service)
+//	                .member(member)
+//	                .build();
+//
+//	        reservationRepository.save(reservation);
+//
+//	        return "isSuccess";
+//
+//	    } catch (Exception e) {
+//	        return "수정 작업 오류 : " + e.getMessage();
+//	    }
+//	}
+	
+
+//	@Transactional
+//	public String update(ReservationDto reservationDto) {
+//	    try {
+//	        // 기존 예약 정보 조회
+//	        int oldCustomerId = reservationRepository.findCustomerIdByReservationNo(reservationDto.getReservationNo());
+//	        String oldServiceCode = reservationRepository.findServiceCodeByReservationNo(reservationDto.getReservationNo());
+//	        String oldMemberId = reservationRepository.findMemberIdByReservationNo(reservationDto.getReservationNo());
+//
+//	        // 새로운 정보 조회
+//	        int newCustomerId = reservationRepository.findCustomerIdByName(reservationDto.getCustomerName());
+//	        String newServiceCode = reservationRepository.findServiceCodeByName(reservationDto.getServiceName());
+//	        String newMemberId = reservationRepository.findMemberIdByName(reservationDto.getMemberName());
+//	        int newServicePrice = reservationRepository.findServicePriceByCode(newServiceCode);
+//
+//	        // 고객 총 결제 금액 수정
+//	        updateCustomerTotal(oldCustomerId, newCustomerId, 
+//	                            reservationRepository.findServicePriceByCode(oldServiceCode), 
+//	                            newServicePrice);
+//
+//	        // 서비스 이용 횟수 수정
+//	        updateServiceCount(oldServiceCode, newServiceCode);
+//
+//	        // 멤버 이용 횟수 수정
+//	        updateMemberCount(oldMemberId, newMemberId);
+//	        
+//	        // 예약 정보 업데이트
+//	        Customer customer = new Customer();
+//	        customer.setCustomerId(newCustomerId);
+//
+//	        Service service = new Service();
+//	        service.setServiceCode(newServiceCode);
+//
+//	        Member member = new Member();
+//	        member.setMemberId(newMemberId);
+//
+//	        // 예약 정보 업데이트
+//	        Reservation reservation = Reservation.builder()
+//	                .reservationNo(reservationDto.getReservationNo())
+//	                .reservationDate(reservationDto.getReservationDate())
+//	                .reservationTime(reservationDto.getReservationTime())
+//	                .reservationComm(reservationDto.getReservationComm())
+//	                .customer(customer)
+//	                .service(service)
+//	                .member(member)
+//	                .build();
+//
+//	        reservationRepository.save(reservation);
+//
+//	        return "isSuccess";
+//
+//	    } catch (Exception e) {
+//	        return "수정 작업 중 오류가 발생했습니다.";
+//	    }
+//	}
+//
+//	private void updateCustomerTotal(int oldId, int newId, int oldPrice, int newPrice) {
+//	    if (oldId != newId) {
+//	        if (oldId > 0 && oldPrice > 0) {
+//	            reservationRepository.decrementCustomerTotal(oldId, oldPrice);
+//	        }
+//	        if (newId > 0 && newPrice > 0) {
+//	            reservationRepository.incrementCustomerTotal(newId, newPrice);
+//	        }
+//	    }
+//	}
+//
+//	private void updateServiceCount(String oldCode, String newCode) {
+//	    if (!Objects.equals(oldCode, newCode)) {
+//	        if (oldCode != null && !oldCode.isEmpty()) {
+//	            reservationRepository.decrementServiceCount(oldCode);
+//	        }
+//	        if (newCode != null && !newCode.isEmpty()) {
+//	            reservationRepository.incrementServiceCount(newCode);
+//	        }
+//	    }
+//	}
+//
+//	private void updateMemberCount(String oldId, String newId) {
+//	    if (!Objects.equals(oldId, newId)) {
+//	        if (oldId != null && !oldId.isEmpty()) {
+//	            reservationRepository.decrementMemberCount(oldId);
+//	        }
+//	        if (newId != null && !newId.isEmpty()) {
+//	            reservationRepository.incrementMemberCount(newId);
+//	        }
+//	    }
+//	}
+
 }
