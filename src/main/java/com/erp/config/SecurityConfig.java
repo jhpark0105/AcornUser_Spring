@@ -38,7 +38,7 @@ public class SecurityConfig {
 			.authorizeRequests()
 			.requestMatchers("/", "/login", "/signup", "/admin/signup", "/logoutProcess", "/main/**", "/main/signup", "/dashboard/**", "/main/dashboard/**").permitAll()
 			.requestMatchers("/main/dashboard/**").permitAll()
-			.anyRequest().authenticated().and()
+			.anyRequest().permitAll().and()
 			.exceptionHandling().authenticationEntryPoint(new FailedAuthenticationEntryPoint());
 			
 		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
