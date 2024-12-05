@@ -18,7 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ReservationDto {
 	
-	private Integer reservationNo;
+	private int reservationNo;
 	private String reservationDate;
 	private String reservationTime;
 	private String reservationComm;
@@ -28,7 +28,7 @@ public class ReservationDto {
 	private String memberName;
 	private String serviceCode;
 	private String serviceName;
-	private Integer servicePrice;
+	private int servicePrice;
 //	private String branchCode;
 	private Customer customer;
 	private Service service;
