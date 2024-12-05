@@ -50,12 +50,17 @@ public class ReservationController {
     public Object getList() {
         return reservationProcess.getData();
     }
+//    @GetMapping("/reservation")
+//    public List<ReservationDto> getList(){
+//    	return reservationProcess.getData();
+//    }
 
     // 예약 추가
     @PostMapping("/reservation")
     public Map<String, Object> insertData(@RequestBody ReservationDto reservationDto) {
         reservationProcess.insertReservation(reservationDto);
         Map<String, Object> map = new HashMap<>();
+        System.out.println("Received Reservation: " + reservationDto);
         map.put("isSuccess", true);
         return map;
     }
@@ -74,4 +79,9 @@ public class ReservationController {
         reservationProcess.update(reservationDto);
         return Map.of("isSuccess", true);
     }
+//    @PutMapping("/reservation/{reservationNo}")
+//    public Map<String, Object> updateData(@RequestBody ReservationDto reservationDto){
+//    	reservationProcess.update(reservationDto);
+//    	return Map.of("isSuccess",true);
+//    }
 }

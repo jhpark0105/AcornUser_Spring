@@ -25,6 +25,8 @@ public class BranchDto {
 
     private String branchNote;
     
+    private String branchRole;
+    
  // Entity -> DTO 변환 메서드
     public static BranchDto fromEntity(Branch branch) {
         return BranchDto.builder()
@@ -48,4 +50,18 @@ public class BranchDto {
     			.branchNote(this.branchNote)
     			.build();
     }
+    
+    // toDto
+ 	public static BranchDto toDto(Branch branch) {
+ 		return BranchDto.builder()
+ 				.branchCode(branch.getBranchCode())
+ 				.branchPw(branch.getBranchPw())
+ 				.branchName(branch.getBranchName())
+ 				.branchTel(branch.getBranchTel())
+ 				.branchAddress(branch.getBranchAddress())
+ 				.branchNote(branch.getBranchNote())
+ 				.branchRole(branch.getBranchRole())
+ 				.build();
+ 	}
+
 }

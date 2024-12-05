@@ -37,6 +37,8 @@ public class Branch {
     @Column(name = "branch_note")
     private String branchNote;
     
+    private String branchRole;
+    
 //  @ManyToOne
 //  @JoinColumn(name = "admin_id")
 //  private Admin admin;

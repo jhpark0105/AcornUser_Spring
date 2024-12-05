@@ -1,5 +1,7 @@
 package com.erp.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,26 +10,31 @@ import org.springframework.data.repository.query.Param;
 import com.erp.entity.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
+//	@Query("SELECT r FROM Reservation r JOIN FETCH r.customer JOIN FETCH r.service JOIN FETCH r.member")
+//	List<Reservation> findAllWithDetails();
+//	@Query("SELECT r.reservationNo, s.serviceName, r.reservationDate, r.reservationTime, c.customerName, m.memberName, r.reservationComm"
+//			+ " FROM Reservation r JOIN FETCH r.customer c JOIN FETCH r.service s JOIN FETCH r.member m")
+//	List<Reservation> findReservationDataWithDetails();
 
 	 //고객명 -> 고객 ID 조회
     @Query("SELECT c.customerId FROM Customer c WHERE c.customerName = :customerName")
-    Integer findCustomerIdByName(@Param("customerName") String customerName);
+    int findCustomerIdByName(@Param("customerName") String customerName);
 
     //서비스명 -> 서비스 코드 조회
     @Query("SELECT s.serviceCode FROM Service s WHERE s.serviceName = :serviceName")
     String findServiceCodeByName(@Param("serviceName") String serviceName);
     
-    //서비스 코드 -> 서비스 가격 조회
-    @Query("SELECT s.servicePrice FROM Service s WHERE s.serviceCode = :serviceCode")
-    Integer findServicePriceByCode(@Param("serviceCode") String serviceCode);
-
     //멤버명 -> 멤버 ID 조회
     @Query("SELECT m.memberId FROM Member m WHERE m.memberName = :memberName")
     String findMemberIdByName(@Param("memberName") String memberName);
     
+    //서비스 코드 -> 서비스 가격 조회
+    @Query("SELECT s.servicePrice FROM Service s WHERE s.serviceCode = :serviceCode")
+    int findServicePriceByCode(@Param("serviceCode") String serviceCode);
+    
     // 예약 코드 -> 고객 ID 조회
     @Query("SELECT r.customer.customerId FROM Reservation r WHERE r.reservationNo = :reservationNo")
-    Integer findCustomerIdByReservationNo(@Param("reservationNo") int reservationNo);
+    int findCustomerIdByReservationNo(@Param("reservationNo") int reservationNo);
 
     // 예약 코드 -> 서비스 코드 조회
     @Query("SELECT r.service.serviceCode FROM Reservation r WHERE r.reservationNo = :reservationNo")

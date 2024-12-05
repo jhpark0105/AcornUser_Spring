@@ -59,5 +59,9 @@ public class BranchProcess {
         branchRepository.deleteById(branchCode);
         return "isSuccess";
     }
+    
+    public BranchDto getBranch(String branchCode) {
+		return BranchDto.fromEntity(branchRepository.findById(branchCode).get());
+	}
 }
 

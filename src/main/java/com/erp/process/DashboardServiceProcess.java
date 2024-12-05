@@ -100,7 +100,7 @@ public class DashboardServiceProcess {
 			/* 복수 서비스 분할 작업 : 서비스 명에 , 구분자 포함 시 분할 후 데이터에 저장 */
 			for (String serviceName : name.split(",")) {
 				
-				int beforeRevenue = map.get(serviceName).get(month);
+				int beforeRevenue = map.get(serviceName).get(month-1);
 				int revenue = count * price;
 				map.get(serviceName).set(month-1, beforeRevenue + revenue);
 			}

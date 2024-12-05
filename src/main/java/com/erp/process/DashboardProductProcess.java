@@ -19,7 +19,7 @@ public class DashboardProductProcess {
     
     public Page<ProductDto> getProductList(int page){
 		Sort sort = Sort.by(Sort.Order.asc("productEa"));
-		Pageable pageable = PageRequest.of(page, 10, sort);
+		Pageable pageable = PageRequest.of(page, 5, sort);
 	    return productRepository.getPartProductList(pageable).map(ProductDto::fromEntity);
 	}
 }
