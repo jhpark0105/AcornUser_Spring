@@ -11,9 +11,9 @@ import org.springframework.data.repository.query.Param;
 import com.erp.entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, String> {
-	//대분류 코드와 소분류 코드로 1개의 소분류 데이터 조회
-    @Query("SELECT p FROM Product p WHERE p.productCode = ?1")
-    Product findProductOne(String productCode);
+	//소분류 코드로 소분류 데이터 조회
+	@Query("SELECT p FROM Product p WHERE p.productCode = :productCode")
+    Product findProductOne(@Param("productCode") String productCode);
 
     /**
      * Dashboard 상품 재고 수량 목록 출력을 위한 메서드

@@ -18,7 +18,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
 	 //고객명 -> 고객 ID 조회
     @Query("SELECT c.customerId FROM Customer c WHERE c.customerName = :customerName")
-    int findCustomerIdByName(@Param("customerName") String customerName);
+    Integer findCustomerIdByName(@Param("customerName") String customerName);
 
     //서비스명 -> 서비스 코드 조회
     @Query("SELECT s.serviceCode FROM Service s WHERE s.serviceName = :serviceName")
