@@ -22,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Customer {
 	@Id
-	private int customerId;
+	private Integer customerId;
 	private String customerName;
 	private String customerGender;
 	private String customerTel;
