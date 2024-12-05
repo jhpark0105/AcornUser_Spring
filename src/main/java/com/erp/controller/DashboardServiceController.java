@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erp.process.DashboardServiceProcess;
 
 @RestController
-@RequestMapping("/dashboard/service")
+@RequestMapping(path = "/dashboard/service")
 @CrossOrigin(origins = "http://localhost:3000")
 public class DashboardServiceController {
 	@Autowired
@@ -22,7 +22,7 @@ public class DashboardServiceController {
 	 * 	연간 서비스 매출액 통계
 	 * @return List<Map<String, Object>>
 	 */
-	@GetMapping()
+	@GetMapping(path = "/chart")
 	public ResponseEntity<Object> getServiceChart() {
 		return ResponseEntity.ok().body(dashboardServiceProcess.getServiceChart());
 	}

@@ -7,7 +7,6 @@ build/
 
 ### STS ###
 .apt_generated
-.classpath
 .factorypath
 .project
 .settings
@@ -40,4 +39,5 @@ out/
 **/src/main/resources/application.properties
 
 .DS_STORE
+
 .classpath

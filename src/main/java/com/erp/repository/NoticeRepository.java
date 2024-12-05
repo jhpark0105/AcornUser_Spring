@@ -14,6 +14,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer>{
 	List<Notice> findByNoticeCheckOrderByNoticeNoDesc(boolean noticeNo);
 	Page<Notice> findByNoticeCheckOrderByNoticeNoDesc(boolean noticeNo, Pageable pageable);
 	
+	// 공지제목에 따른 검색결과 페이징처리
 	Page<Notice> findByNoticeTitleContainingOrderByNoticeNoDesc(String keyword, Pageable pageable);
 
 	/* Dashboard 공지사항 목록 출력용 */
