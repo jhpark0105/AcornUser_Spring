@@ -24,4 +24,12 @@ public class ProductBDto {
                 .productBName(productB.getProductBName())
                 .build();
     }
+    
+    //DTO -> Entity 변환 메서드
+    public Product_B toEntity() {
+        return Product_B.builder()
+                .productBCode(this.productBCode)
+                .productBName(this.productBName)
+                .build();
+    }
 }
