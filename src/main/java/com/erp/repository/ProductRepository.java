@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
      * @param pageable
      * @return
      */
-    @Query("SELECT p FROM Product p WHERE p.productEa < 5")
+    @Query("SELECT p FROM Product p WHERE p.productEa < 10")
 	Page<Product> getPartProductList(Pageable pageable);
     
     @Query("SELECT p FROM Product p WHERE p.product_b.productBCode=:productBCode")

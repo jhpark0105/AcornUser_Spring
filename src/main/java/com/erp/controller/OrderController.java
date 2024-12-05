@@ -36,8 +36,8 @@ public class OrderController {
 	public ResponseEntity<Object> getAllOrderList(@PathVariable("branchCode") String branchCode, @RequestParam(value = "page", required = false, defaultValue = "1" ) int page){
 		Page<OrderDtoWithNo> list= orderProcess.getBranchOrders(page-1, branchCode);
 		int nowPage = list.getNumber()+1;
-		int startPage = Math.max(nowPage-2, 1);
-		int endPage = Math.min(nowPage+2, list.getTotalPages());
+		int startPage = 1;
+		int endPage = list.getTotalPages();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
 		map.put("nowPage", nowPage);
