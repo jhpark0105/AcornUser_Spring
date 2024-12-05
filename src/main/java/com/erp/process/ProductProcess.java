@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.erp.dto.ProductBDto;
 import com.erp.dto.ProductDto;
+import com.erp.dto.ProductDtoFO;
 import com.erp.entity.Product;
 import com.erp.entity.Product_B;
 import com.erp.repository.ProductBRepository;
@@ -72,6 +73,12 @@ public class ProductProcess {
 	            .map(product -> new ProductDto(
 	                product.getProduct_b().getProductBCode(), product.getProduct_b().getProductBName(), product.getProductCode(), product.getProductName(), product.getProductPrice(), product.getProductEa()))
 	            .collect(Collectors.toList());
+	}
+	//대분류별 소분류 목록 조회
+	public List<ProductDtoFO> getProductListWithBCode(String productBCode){
+		return productRepository.getProductListWithBCode(productBCode).stream()
+				.map(ProductDtoFO::fromEntity)
+				.toList();
 	}
 	
 	//소분류 상품 1개의 자료 읽기
