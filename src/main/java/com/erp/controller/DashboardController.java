@@ -45,30 +45,7 @@ public class DashboardController {
 	public List<NoticeDto> getCheckedNoticeList(){
 		return noticeProcess.getCheckedNoticeList();
 	}
-	
-	
-	/**
-	 * 재고 수량 10개 이하 상품 목록 출력
-	 * @param page : 현재 페이지 번호 (페이징 처리용)
-	 * @return
-	 */
-	@GetMapping(path = "/product")
-	public ResponseEntity<Object> getProductList(@RequestParam(value = "page", required = false, defaultValue = "1" ) int page){
-		Page<ProductDto> list= dashboardProcess.getProductList(page-1);
-		int nowPage = list.getNumber()+1;
-		int startPage = 1;
-		int endPage = list.getTotalPages();
-		Map<String, Object> map = new HashMap<>();
-		map.put("list", list);
-		map.put("nowPage", nowPage);
-		map.put("startPage", startPage);
-		map.put("endPage", endPage);
-		map.put("page", page);
-		return ResponseEntity.ok(map);
-	}
-	
 
-	
 	/**
 	 * 특정 날짜의 예약 현황 데이터를 요청 페이지 범위 내에서 반환. 
 	 * 
