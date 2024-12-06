@@ -28,13 +28,6 @@ public class CustomerController {
 		return customerProcess.getCustomerAll();
 	}
 	
-	// 한 명 읽기
-	@GetMapping("customer/{customerName}")
-	public CustomerDto getCustomerByName(@PathVariable("customerName")String customerName) {
-		
-		return customerProcess.getCustomerByName(customerName);
-	}
-	
 	// 회원 추가
 	@PostMapping("customer")
 	public Map<String, Object> insertProcess(@RequestBody CustomerDto customerDto) {
