@@ -18,29 +18,6 @@ public class AdminProcess {
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-	// 어드민 계정 회원 가입
-	public void insert(AdminDto dto) {
-		// DB에 이미 동일한 adminId를 가진 계정이 존재하는지 검증
-		boolean isAdmin = adminRepository.existsByAdminId(dto.getAdminId());
-		if(isAdmin) {
-			throw new IllegalArgumentException("동일 ID가 존재합니다.");
-		}
-		Admin admin = new Admin();
-		admin.setAdminId(dto.getAdminId());
-		admin.setAdminPw(bCryptPasswordEncoder.encode(dto.getAdminPw()));
-		admin.setAdminRole("ROLE_ADMIN");
-		admin.setAdminName(dto.getAdminName());
-		admin.setAdminBirth(dto.getAdminBirth());
-		admin.setAdminPhone(dto.getAdminPhone());
-		admin.setAdminPostcode(dto.getAdminPostcode());
-		admin.setAdminAddress1(dto.getAdminAddress1());
-		admin.setAdminAddress2(dto.getAdminAddress2());
-		admin.setAdminTerm1(dto.getAdminTerm1());
-		admin.setAdminTerm2(dto.getAdminTerm2());
-		admin.setAdminTerm3(dto.getAdminTerm3());
-		adminRepository.save(admin);
-	}
 	
 	// 어드민 계정 전체 조회
 	public List<AdminDto> selectAll() {

@@ -1,5 +1,6 @@
 package com.erp.common;
 
+// HTTP Status 응답 코드 인터페이스
 public interface ResponseCode {
 	
 	// HTTP Status 200
