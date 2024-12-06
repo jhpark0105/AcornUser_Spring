@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
-import com.erp.dto.DashboardChartDto;
 import com.erp.dto.DashboardReservationDto;
 import com.erp.dto.ProductDto;
 import com.erp.entity.Reservation;
@@ -151,7 +150,7 @@ public class DashboardProcess {
 		Map<String, List<Integer>> map = new LinkedHashMap<>();
 
 		/* 2> 단일 서비스 항목으로 Map 초기화 {서비스명, 배열} */
-		getSingleService().forEach(service -> {
+		getSingleService().stream().forEach((service) -> {
 			/* 매출액 저장용 배열 리스트 초기화 */
 			List<Integer> monthList = new ArrayList<>(12);
 			for (int i = 0; i < 12; i++) monthList.add(0);
@@ -162,31 +161,30 @@ public class DashboardProcess {
 		});
 
 		/* 서비스명, 시술 월, 시술횟수, 시술 비용 DB 데이터 조회 */
-		List<DashboardChartDto> list = dashboardReservationRepository.findServiceMonthCount();
-		list.forEach(dto -> {
-			String name = dto.getServiceName();
-			int month = dto.getMonth();
-			int count = dto.getCount();
-			int price = dto.getPrice();
-			log.info("서비스명 : {}, 시술 월 : {}, 시술 횟수 : {}, 시술 비용 : {}", 
+		List<Object[]> list = dashboardReservationRepository.findServiceMonthCount();
+		for (Object[] obj : list) {
+			String name = String.valueOf(obj[0]);
+			int month = Integer.parseInt(String.valueOf(obj[1]));
+			int count = Integer.parseInt(String.valueOf(obj[2]));
+			int price =  Integer.parseInt(String.valueOf(obj[3]));
+			log.info("서비스명 : {}, "
+					+ "시술 월 : {}, "
+					+ "시술 횟수 : {}, "
+					+ "시술 비용 : {}", 
 					name, month, count, price);
+			
 			/* 복수 서비스 분할 작업 : 서비스 명에 , 구분자 포함 시 분할 후 데이터에 저장 */
 			for (String serviceName : name.split(",")) {
-				/* 단일 서비스명에 해당하는 매출액 리스트 */
-				List<Integer> revenueList = map.get(serviceName);
+				
+				int beforeRevenue = map.get(serviceName).get(month-1);
 				int revenue = count * price;
-				int index = month - 1;
-				revenueList.set(index, revenueList.get(index) + revenue);
+				map.get(serviceName).set(month-1, beforeRevenue + revenue);
 			}
-		});
-		/**
-		 * Map.forEach(biConsumer) -> Key, Value 두 개의 매개변수를 전달받는다.
-		 * 
-		 * for (Map.Entry<K, V> entry : map.entrySet())
-		 *    action.accept(entry.getKey(), entry.getValue());
-		 * 
-		 */
-		map.forEach((key, value) -> response.add(Map.of("name", key, "data", value)));
+		}
+		/* Key, Value로 포장 */
+		for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
+			response.add(Map.of("name", entry.getKey(), "data", entry.getValue()));
+		}
 		return response;
 	}
 

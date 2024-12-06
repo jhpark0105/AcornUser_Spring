@@ -144,7 +144,7 @@ public class DashboardController {
 	 * 	연간 서비스 매출액 통계
 	 * @return List<Map<String, Object>>
 	 */
-	@GetMapping(path = "/chart")
+	@GetMapping(path = "/service/chart")
 	public ResponseEntity<Object> getServiceChart() {
 		return ResponseEntity.ok().body(dashboardProcess.getServiceChart());
 	}
