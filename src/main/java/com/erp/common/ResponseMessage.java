@@ -1,24 +1,26 @@
 package com.erp.common;
 
+//HTTP Status 응답 메세지 인터페이스
 public interface ResponseMessage {
+	
 	// HTTP Status 200
-		String SUCCESS = "Success.";
+	String SUCCESS = "Success.";
 		
-		// HTTP Status 400
-		String VALIDATION_FAILED = "Validation failed.";
-		String DUPLICATE_ID = "Duplicate id.";
-		String DUPLICATE_EMAIL = "Duplicate email.";
-		String DUPLICATE_PHONE = "Duplicate phone.";
-		String NOT_EXISTED_USER = "This user does not exist.";
-		String NOT_EXISTED_BOARD = "this board does not exist.";
+	// HTTP Status 400
+	String VALIDATION_FAILED = "Validation failed.";
+	String DUPLICATE_ID = "Duplicate id.";
+	String DUPLICATE_EMAIL = "Duplicate email.";
+	String DUPLICATE_PHONE = "Duplicate phone.";
+	String NOT_EXISTED_USER = "This user does not exist.";
+	String NOT_EXISTED_BOARD = "this board does not exist.";
 		
-		// HTTP Status 401
-		String SIGN_IN_FAIL = "Login information mismatch.";
-		String AUTHORIZATION_FAIL = "Authorization Failed.";
+	// HTTP Status 401
+	String SIGN_IN_FAIL = "Login information mismatch.";
+	String AUTHORIZATION_FAIL = "Authorization Failed.";
 		
-		// HTTP status 403
-		String NO_PERMISSION = "Do not have permission.";
+	// HTTP status 403
+	String NO_PERMISSION = "Do not have permission.";
 		
-		// HTTP status 500
-		String DATABASE_ERROR = "Database error.";
+	// HTTP status 500
+	String DATABASE_ERROR = "Database error.";
 }

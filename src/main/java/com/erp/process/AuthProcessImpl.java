@@ -29,29 +29,32 @@ public class AuthProcessImpl implements AuthProcess {
 	private final BranchRepository branchRepository;
 	private final JwtProvider jwtProvider;
 	
+	// 비밀번호 암호화를 위한 인코더
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
+	// 어드민 회원가입
 	@Override
 	public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto) {
 		
 		try {
-
-			String id = dto.getAdminId();
-			boolean existedId = adminRepository.existsByAdminId(id);
-			if(existedId) return SignUpResponseDto.duplicateId();
 			
-			String email = dto.getAdminEmail();
-			boolean existedEmail = adminRepository.existsByAdminEmail(email);
-			if(existedEmail) return SignUpResponseDto.duplicateEmail();
+			String id = dto.getAdminId(); // 클라이언트 입력받은 아이디
+			boolean existedId = adminRepository.existsByAdminId(id); // 아이디 중복 체크
+			if(existedId) return SignUpResponseDto.duplicateId(); // 아이디 중복 시 응답
 			
-			String phone = dto.getAdminPhone();
-			boolean existedPhone = adminRepository.existsByAdminPhone(phone);
-			if(existedPhone) return SignUpResponseDto.duplicatePhone();
+			String email = dto.getAdminEmail(); // 클라이언트 입력받은 이메일
+			boolean existedEmail = adminRepository.existsByAdminEmail(email); // 이메일 중복 체크
+			if(existedEmail) return SignUpResponseDto.duplicateEmail(); // 이메일 중복 시 응답
 			
-			String password = dto.getAdminPw(); // 패스워드
+			String phone = dto.getAdminPhone(); // 클라이언트 입력받은 번호
+			boolean existedPhone = adminRepository.existsByAdminPhone(phone); // 번호 중복 체크
+			if(existedPhone) return SignUpResponseDto.duplicatePhone(); // 번호 중복 시 응답
+			
+			String password = dto.getAdminPw(); // 클라이언트 입력 패스워드
 			String encodedPassword = passwordEncoder.encode(password); // 암호화된 패스워드로 변환
-			dto.setAdminPw(encodedPassword);
+			dto.setAdminPw(encodedPassword); // 암호화된 패스워드 넣어줌
 			
+			// SignUpRequestDto로 받아온 데이터 저장
 			Admin admin = new Admin();
 			admin.setAdminId(dto.getAdminId());
 			admin.setAdminPw(encodedPassword);
@@ -70,57 +73,63 @@ public class AuthProcessImpl implements AuthProcess {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseDto.databaseError();
+			return ResponseDto.databaseError(); // 에러 시 데이터베이스 오류 응답
 		}
-		return SignUpResponseDto.success();
+		return SignUpResponseDto.success(); // 성공 응답
 	}
 	
+	// 어드민 로그인
 	@Override
 	public ResponseEntity<? super LoginRepsonseDto> login(LoginRequestDto dto) {
 		
-		String token = null;
+		String token = null; // JWT 토큰 초기화
 		
 		try {
-			String id = dto.getId();
-			Admin admin = adminRepository.findByAdminId(id);
-			if(admin == null) return LoginRepsonseDto.loginFailed();
+			String id = dto.getId(); // 클라이언트 입력 아이디
+			Admin admin = adminRepository.findByAdminId(id); // 해당 어드민 계정 정보 조회
+			if(admin == null) return LoginRepsonseDto.loginFailed(); // 계정 없을 시 로그인 실패 응답
 			
-			String password = dto.getPassword();
-			String encodedPassword = admin.getAdminPw();
+			String password = dto.getPassword(); // 클라이언트 입력 패스워드
+			String encodedPassword = admin.getAdminPw(); // 데이터베이스에 저장되어있는 암호화된 패스워드
 			boolean isMatched = passwordEncoder.matches(password, encodedPassword); // 암호화된 패스워드와 입력 패스워드를 검증
-			if(!isMatched) return LoginRepsonseDto.loginFailed();
+			if(!isMatched) return LoginRepsonseDto.loginFailed(); // 패스워드가 같지 않다면 로그인 실패 응답
 			
-			token = jwtProvider.create(id);
+			token = jwtProvider.create(id); // 로그인 성공 시 JWT 토큰 생성
 			
 			 // JWT를 쿠키에 설정
             ResponseCookie cookie = ResponseCookie.from("accessToken", token)
-                    .httpOnly(true)    // 클라이언트 JS에서 쿠키를 읽을 수 없게 설정
+                    .httpOnly(true)    // 클라이언트 스크립트에서 접근 불가
                     .secure(true)      // HTTPS에서만 쿠키 전송(true), HTTP도 가능(false)
                     .path("/")         // 쿠키가 유효한 경로 설정
                     .maxAge(3600)      // 쿠키 만료 시간 (초 단위)
-                    .sameSite("None") // CSRF 보호를 위한 SameSite 설정,  크로스 도메인에서 쿠키 전송 허용(None), 동일 도메인(Strict), 상호작용이 필요한 상황에만 쿠키 전송(Lax)
+                    .sameSite("None")  // CSRF 보호를 위한 SameSite 설정, 크로스 도메인에서 쿠키 전송 허용(None), 동일 도메인(Strict), 상호작용이 필요한 상황에만 쿠키 전송(Lax)
                     .build();
             
-            System.out.println(cookie);
+            System.out.println(cookie); // 쿠키 정보 로그
 
-            return ResponseEntity.ok()
+            return ResponseEntity.ok() // 로그인 성공 시 응답
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())  // 쿠키를 응답 헤더에 포함
                     .body(LoginRepsonseDto.success(token));  // 로그인 성공 응답 반환
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseDto.databaseError();
+			return ResponseDto.databaseError(); // 실패 시 데이터베이스 오류 응답
 		}
-		//return LoginRepsonseDto.success(token);
 	}
-	// branch 등록
+	
+	// 브랜치 등록
 	@Override
 	public ResponseEntity<? super SignUpResponseDto> branchSignUp(BranchSignUpRequestDto dto) {
 		try {
 			
-			String password = dto.getBranchPw(); // 패스워드
-			String encodedPassword = passwordEncoder.encode(password); // 암호화된 패스워드로 변환
-			dto.setBranchPw(encodedPassword);
+			String code = dto.getBranchCode(); // 클라이언트 입력 코드
+			boolean existedId = branchRepository.existsByBranchCode(code); // 코드 중복 체크
+			if(existedId) return SignUpResponseDto.duplicateId(); // 코드 중복 시 응답
 			
+			String password = dto.getBranchPw(); // 클라이언트 입력 패스워드
+			String encodedPassword = passwordEncoder.encode(password); // 암호화된 패스워드로 변환
+			dto.setBranchPw(encodedPassword); // 암호화된 패스워드 넣어줌
+			
+			// SignUpRequestDto로 받아온 데이터 저장
 			Branch branch = new Branch();
 			branch.setBranchCode(dto.getBranchCode());
 			branch.setBranchPw(encodedPassword);
@@ -133,45 +142,45 @@ public class AuthProcessImpl implements AuthProcess {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseDto.databaseError();
+			return ResponseDto.databaseError(); // 에러 시 데이터베이스 오류 응답
 		}
-		return SignUpResponseDto.success();
+		return SignUpResponseDto.success(); // 성공 응답
 	}
 	
-	// branch 로그인
+	// 브랜치 로그인
 	@Override
 	public ResponseEntity<? super LoginRepsonseDto> branchLogin(LoginRequestDto dto) {
 		String token = null;
 		
 		try {
-			String id = dto.getId();
-			Branch branch = branchRepository.findByBranchCode(id);
-			if(branch == null) return LoginRepsonseDto.loginFailed();
+			String id = dto.getId(); // 클라이언트 입력 아이디
+			Branch branch = branchRepository.findByBranchCode(id); // 해당 브랜치 정보 조회
+			if(branch == null) return LoginRepsonseDto.loginFailed(); // 계정 없을 시 로그인 실패 응답
 			
-			String password = dto.getPassword();
-			String encodedPassword = branch.getBranchPw();
+			String password = dto.getPassword(); // 클라이언트 입력 패스워드
+			String encodedPassword = branch.getBranchPw(); // 데이터베이스에 저장되어있는 암호화된 패스워드
 			boolean isMatched = passwordEncoder.matches(password, encodedPassword); // 암호화된 패스워드와 입력 패스워드를 검증
-			if(!isMatched) return LoginRepsonseDto.loginFailed();
+			if(!isMatched) return LoginRepsonseDto.loginFailed(); // 패스워드가 같지 않다면 로그인 실패 응답
 			
-			token = jwtProvider.create(id);
+			token = jwtProvider.create(id); // 로그인 성공 시 JWT 토큰 생성
 			
 			 // JWT를 쿠키에 설정
             ResponseCookie cookie = ResponseCookie.from("accessToken", token)
-                    .httpOnly(true)  // 클라이언트 JS에서 쿠키를 읽을 수 없게 설정
-                    .secure(true)    // HTTPS에서만 쿠키 전송(true), HTTP도 가능(false)
-                    .path("/")       // 쿠키가 유효한 경로 설정
-                    .maxAge(3600)    // 쿠키 만료 시간 (초 단위)
-                    .sameSite("None") // CSRF 보호를 위한 SameSite 설정,  크로스 도메인에서 쿠키 전송 허용(None), 동일 도메인(Strict), 상호작용이 필요한 상황에만 쿠키 전송(Lax)
+                    .httpOnly(true)   // 클라이언트 스크립트에서 접근 불가
+                    .secure(true)     // HTTPS에서만 쿠키 전송(true), HTTP도 가능(false)
+                    .path("/")        // 쿠키가 유효한 경로 설정
+                    .maxAge(3600)     // 쿠키 만료 시간 (초 단위)
+                    .sameSite("None") // CSRF 보호를 위한 SameSite 설정, 크로스 도메인에서 쿠키 전송 허용(None), 동일 도메인(Strict), 상호작용이 필요한 상황에만 쿠키 전송(Lax)
                     .build();
             
-            System.out.println(cookie);
+            System.out.println(cookie); // 쿠키 정보 로그
 
-            return ResponseEntity.ok()
+            return ResponseEntity.ok() // 로그인 성공 시 응답
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())  // 쿠키를 응답 헤더에 포함
                     .body(LoginRepsonseDto.success(token));  // 로그인 성공 응답 반환
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseDto.databaseError();
+			return ResponseDto.databaseError(); // 실패 시 데이터베이스 오류 응답
 		}
 	}
 }

@@ -9,6 +9,7 @@ import com.erp.common.ResponseMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+// 응답 관리 DTO
 @Getter
 @AllArgsConstructor
 public class ResponseDto {

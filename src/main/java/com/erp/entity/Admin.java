@@ -3,6 +3,7 @@ package com.erp.entity;
 import com.erp.dto.AdminDto;
 import com.erp.dto.SignUpRequestDto;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -19,22 +20,48 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Admin {
 	@Id
+	@Column(name = "admin_id")
 	private String adminId;
+	
+	@Column(name = "admin_pw")
 	private String adminPw;
+	
+	@Column(name = "admin_role")
 	private String adminRole;
+	
+	@Column(name = "admin_name")
 	private String adminName;
+	
+	@Column(name = "admin_email")
 	private String adminEmail;
+	
+	@Column(name = "admin_birth")
 	private String adminBirth;
+	
+	@Column(name = "admin_phone")
 	private String adminPhone;
+	
+	@Column(name = "admin_postcode")
 	private String adminPostcode;
+	
+	@Column(name = "admin_address1")
 	private String adminAddress1;
+	
+	@Column(name = "admin_address2")
 	private String adminAddress2;
+	
+	@Column(name = "admin_term1")
 	private String adminTerm1;
+	
+	@Column(name = "admin_term2")
 	private String adminTerm2;
+	
+	@Column(name = "admin_term3")
 	private String adminTerm3;
 	
 	
 	// toEntity
+	// 클라이언트로부터 받아온 데이터를 엔티티에 저장하는 메소드
 	public static Admin toEntity(AdminDto dto) {
 		return Admin.builder()
 				.adminId(dto.getAdminId())
@@ -52,6 +79,8 @@ public class Admin {
 				.build();
 	}
 	
+	// 회원가입 시 클라이언트로부터 받아온 데이터를 엔티티에 저장하는 메소드
+	// 데이터 저장 및 데이터베이스 매핑용 객체를 생성
 	public Admin(SignUpRequestDto dto) {
 		this.adminId = dto.getAdminId();
 		this.adminPw = dto.getAdminPw();

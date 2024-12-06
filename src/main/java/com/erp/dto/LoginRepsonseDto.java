@@ -8,6 +8,7 @@ import com.erp.common.ResponseMessage;
 
 import lombok.Getter;
 
+// LoginRepsonseDto : 로그인 과정에서 발생하는 다양한 응답을 관리하는 DTO
 @Getter
 public class LoginRepsonseDto extends ResponseDto {
 	
