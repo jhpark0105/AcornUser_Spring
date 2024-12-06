@@ -79,7 +79,7 @@ public class ReservationProcess {
     public String insertReservation(ReservationDto reservationDto) {
 		try {
 		// Name으로 ID 조회
-		int customerId = reservationRepository.findCustomerIdByName(reservationDto.getCustomerName());
+		Integer customerId = reservationRepository.findCustomerIdByName(reservationDto.getCustomerName());
         String serviceCode = reservationRepository.findServiceCodeByName(reservationDto.getServiceName());
         String memberId = reservationRepository.findMemberIdByName(reservationDto.getMemberName());
         
@@ -132,6 +132,7 @@ public class ReservationProcess {
 		}
         
     }
+
     
    
 	
