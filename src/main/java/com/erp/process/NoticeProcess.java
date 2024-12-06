@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.erp.dto.NoticeDto;
+import com.erp.dto.NoticeNoOnly;
 import com.erp.entity.Notice;
 import com.erp.repository.NoticeRepository;
 
@@ -65,9 +66,21 @@ public class NoticeProcess {
 
 	// 해당 번호 공지 읽기
 	public NoticeDto selectOne(int noticeNo) {
-		return noticeRepository.findById(noticeNo)
-			.map(Notice::toDto).orElseThrow(()
-				-> new NoSuchElementException("해당 번호와 일치하는 공지사항이 없습니다."));
+	    Notice currentNotice = noticeRepository.findById(noticeNo)
+	        .orElseThrow(() -> new NoSuchElementException("해당 번호와 일치하는 공지사항이 없습니다."));
+
+	    // 이전/이후버튼에 해당하는 공지번호 
+	    NoticeNoOnly prevNotice = noticeRepository.findFirstByNoticeNoLessThanOrderByNoticeNoDesc(noticeNo);
+	    NoticeNoOnly nextNotice = noticeRepository.findFirstByNoticeNoGreaterThanOrderByNoticeNoAsc(noticeNo);
+
+	    return NoticeDto.builder()
+	        .noticeNo(currentNotice.getNoticeNo())
+	        .noticeTitle(currentNotice.getNoticeTitle())
+	        .noticeContent(currentNotice.getNoticeContent())
+	        .noticeReg(currentNotice.getNoticeReg())
+	        .prevNo(prevNotice != null ? prevNotice.getNoticeNo() : null)
+	        .nextNo(nextNotice != null ? nextNotice.getNoticeNo() : null)
+	        .build();
 	}
 	
 	// 검색결과 페이징
