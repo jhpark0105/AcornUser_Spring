@@ -74,7 +74,7 @@ public class NoticeProcess {
 				.map(Notice::toDto);
 	}
 
-
+	// 중요 공지 목록 읽기
 	public List<NoticeDto> getCheckedNoticeList() {
 		return noticeRepository.getCheckedNoticeList()
 					.stream().map(Notice::toDto).collect(Collectors.toList());

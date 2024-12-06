@@ -1,9 +1,6 @@
 package com.erp.repository;
 
 import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,8 +17,8 @@ public interface ProductRepository extends JpaRepository<Product, String> {
      * @param pageable
      * @return
      */
-    @Query("SELECT p FROM Product p WHERE p.productEa < 10")
-	Page<Product> getPartProductList(Pageable pageable);
+    @Query("SELECT p FROM Product p WHERE p.productEa < 33")
+	List<Product> getProductListLessThan10();
     
     @Query("SELECT p FROM Product p WHERE p.product_b.productBCode=:productBCode")
     List<Product> getProductListWithBCode(@Param("productBCode")String productBCode);
