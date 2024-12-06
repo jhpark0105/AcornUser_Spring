@@ -55,26 +55,25 @@ public interface DashboardReservationRepository extends JpaRepository<Reservatio
 	 * 	1. 서비스명
 	 * 	2. 서비스 시행 일자(MONTH) 
 	 * 		FUNCTION('MONTH', Date) 
-	 * 			: Date 타입에서 MONTH에 해당하는 값을 추출(반환)하는 JPA 함수 _ Native Query에 준하는 수준..
+	 * 			: Date 타입에서 MONTH에 해당하는 값을 추출(반환)하는 JPA 함수
 	 * 	3. 시술 횟수(COUNT) 
 	 * 		FUNCTION('STR_TO_DATE', String, Format) 
 	 * 			: 날짜 필드가 문자열 타입일 경우 날짜 타입으로 변경해주는 JPA 함수   "StringToDate"
 	 * 	4. 시술 비용
 	 * 
-	 * ============ 조건 ============
+	 * ========== 조건 ==========
 	 * 	연도 일치, 서비스명 그룹, 서비스코드, 예약 날짜로 정렬
 	 * 
-	 * @return 차트 출력에 필요한 데이터 전송용 객체 생성 후 데이터 저장, 전달
+	 * @return 엔티티 내 필드에 해당 속성이 없기 때문에 별도의 Object 배열에 저장 후 반환
 	 */
-	@Query("SELECT new com.erp.dto.DashboardChartDto(" +
-			"r.service.serviceName, " +
+	@Query("SELECT r.service.serviceName, " +
 		       	   "FUNCTION('MONTH', FUNCTION('STR_TO_DATE', r.reservationDate, '%Y-%m-%d')), " +
-		       	   "COUNT(r), " +
-				   "r.service.servicePrice) " + 
+		       	   "COUNT(FUNCTION('MONTH', FUNCTION('STR_TO_DATE', r.reservationDate, '%Y-%m-%d'))), " +
+				   "r.service.servicePrice " + 
 			"FROM Reservation r " +
 			"WHERE FUNCTION('YEAR', FUNCTION('STR_TO_DATE', r.reservationDate, '%Y-%m-%d')) = FUNCTION('YEAR', CURRENT_DATE) " +
 			"GROUP BY r.service.serviceName, FUNCTION('MONTH', FUNCTION('STR_TO_DATE', r.reservationDate, '%Y-%m-%d')) " +
 			"ORDER BY r.service.serviceCode ASC, FUNCTION('STR_TO_DATE', r.reservationDate, '%Y-%m-%d') ASC")
-	List<DashboardChartDto> findServiceMonthCount();
+	List<Object[]> findServiceMonthCount();
 
 }
