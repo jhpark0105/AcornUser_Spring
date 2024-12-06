@@ -65,6 +65,11 @@ public class ProductController {
     public List<ProductDto> getProducts() {
         return productProcess.getProductList();
     }
+    //소분류 목록 불러오기
+    @GetMapping("/product/dashboard")
+    public List<ProductDto> getProductListLessThan10() {
+        return productProcess.getProductListLessThan10();
+    }
 	//대분류별 소분류 목록 불러오기
     @GetMapping("/product/order/{productBCode}")
     public List<ProductDtoFO> getProductListWithBCode(@PathVariable("productBCode")String productBCode) {

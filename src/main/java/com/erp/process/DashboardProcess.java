@@ -48,19 +48,7 @@ public class DashboardProcess {
         this.dashboardReservationRepository = dashboardReservationRepository;
         this.dashboardServiceRepository = dashboardServiceRepository;
     }
-    
-    /**
-     * 
-     * @param page
-     * @return
-     */
-    public Page<ProductDto> getProductList(int page){
-		Sort sort = Sort.by(Sort.Order.asc("productEa"));
-		Pageable pageable = PageRequest.of(page, 10, sort);
-	    return productRepository.getPartProductList(pageable).map(ProductDto::fromEntity);
-	}
-    
-    
+
     /**
 	 * 특정 날짜에 해당하는 예약 시간, 서비스명, 고객명, 직원명이 하나의 레코드인 데이터들에 대해, 
 	 * 사용자가 요청한 페이지에 해당하는 데이터들만 반환.

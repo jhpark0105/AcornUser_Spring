@@ -99,6 +99,13 @@ public class ProductProcess {
 	            .build())
 	        .collect(Collectors.toList());
 	}
+	//소분류(재고 10개 미만) 목록 조회
+	public List<ProductDto> getProductListLessThan10() {
+		return productRepository.getProductListLessThan10().stream()
+				.map(ProductDto::fromEntity)
+				.toList();
+	}
+	
 	//대분류별 소분류 목록 조회
 	public List<ProductDtoFO> getProductListWithBCode(String productBCode){
 		return productRepository.getProductListWithBCode(productBCode).stream()
