@@ -27,7 +27,7 @@ import lombok.Setter;
 @Table(name = "customer")
 public class Customer {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //자동증가
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //자동증가(회원번호)
 	@Column(name="customer_id")
 	private int customerId;
 	
