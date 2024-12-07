@@ -112,22 +112,12 @@ public class NoticeProcess {
 		}
 		return response;
 	}
+	
+	// 방금 작성한 공지번호 가져오기
+	public Map<String, Object> selectLatestNo() {
+		return Map.of("noticeNo", noticeRepository.findFirstByOrderByNoticeNoDesc().getNoticeNo());
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

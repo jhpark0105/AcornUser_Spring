@@ -25,4 +25,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer>{
 	// 이전/다음버튼 클릭 시 해당하는 공지번호 쿼리용
 	NoticeNoOnly findFirstByNoticeNoLessThanOrderByNoticeNoDesc(int currentNo);
 	NoticeNoOnly findFirstByNoticeNoGreaterThanOrderByNoticeNoAsc(int currentNo);
+	
+	// 공지작성 후 최근 공지번호 가져오기
+	NoticeNoOnly findFirstByOrderByNoticeNoDesc();
 }
