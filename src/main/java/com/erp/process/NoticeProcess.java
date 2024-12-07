@@ -1,9 +1,7 @@
 package com.erp.process;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -97,51 +95,4 @@ public class NoticeProcess {
 		return noticeRepository.getCheckedNoticeList()
 					.stream().map(Notice::toDto).collect(Collectors.toList());
 	}
-	
-	// 공지 작성
-	public Map<String, Object> insert(NoticeDto dto) {
-		Map<String, Object> response = new HashMap<String, Object>();
-		try {
-			Notice newData = Notice.of(dto);
-			noticeRepository.save(newData);
-			response.put("isSuccess", true);
-			response.put("message", "공지를 작성하였습니다.");
-		} catch (Exception e) {
-			response.put("isSuccess", false);
-			response.put("message", "공지 작성중 오류발생: " + e.getMessage());
-		}
-		return response;
-	}
-	
-	// 방금 작성한 공지번호 가져오기
-	public Map<String, Object> selectLatestNo() {
-		return Map.of("noticeNo", noticeRepository.findFirstByOrderByNoticeNoDesc().getNoticeNo());
-	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
