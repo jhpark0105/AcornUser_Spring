@@ -1,4 +1,4 @@
-package com.erp.controller;
+package com.erp.controller.branch;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -13,7 +13,7 @@ import com.erp.dto.LoginRepsonseDto;
 import com.erp.dto.LoginRequestDto;
 import com.erp.dto.SignUpRequestDto;
 import com.erp.dto.SignUpResponseDto;
-import com.erp.process.AuthProcess;
+import com.erp.process.branch.AuthProcess;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.erp.controller;
+package com.erp.controller.branch;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ import com.erp.dto.OrderDto;
 import com.erp.dto.OrderDtoWithNo;
 import com.erp.dto.ProductBDto;
 import com.erp.dto.ProductDtoFO;
-import com.erp.process.BranchProcess;
-import com.erp.process.OrderProcess;
+import com.erp.process.branch.BranchProcess;
+import com.erp.process.branch.OrderProcess;
 @RestController
 @RequestMapping("/order")
 @CrossOrigin(origins = "http://localhost:3000")

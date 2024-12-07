@@ -1,4 +1,4 @@
-package com.erp.process;
+package com.erp.process.branch;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
