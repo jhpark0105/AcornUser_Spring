@@ -52,14 +52,4 @@ public class Notice {
 			.noticeReg(noticeReg)
 			.noticeCheck(noticeCheck).build();
 	}
-	
-	// Dto -> Entity
-	public static Notice of(NoticeDto dto) {
-		return Notice.builder()
-			.noticeNo(dto.getNoticeNo())
-			.noticeTitle(dto.getNoticeTitle())
-			.noticeContent(dto.getNoticeContent())
-			.noticeReg(dto.getNoticeReg())
-			.noticeCheck(dto.isNoticeCheck()).build();
-	}
 }
