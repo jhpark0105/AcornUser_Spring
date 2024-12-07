@@ -2,10 +2,9 @@ package com.erp.controller;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.erp.dto.BranchDto;
 import com.erp.dto.OrderDto;
@@ -32,20 +30,16 @@ public class OrderController {
 		this.orderProcess = orderProcess;
 		this.branchProcess=branchProcess;
 	}
+	@GetMapping
+	public ResponseEntity<Object> getAllOrderList(@PathVariable("branchCode") String branchCode){
+		List<OrderDtoWithNo> list= orderProcess.getAllOrderList();
+		return ResponseEntity.ok(list);
+	}
 	//branch별 발주 목록 요청
 	@GetMapping("/{branchCode}")
-	public ResponseEntity<Object> getAllOrderList(@PathVariable("branchCode") String branchCode, @RequestParam(value = "page", required = false, defaultValue = "1" ) int page){
-		Page<OrderDtoWithNo> list= orderProcess.getBranchOrders(page-1, branchCode);
-		int nowPage = list.getNumber()+1;
-		int startPage = 1;
-		int endPage = list.getTotalPages();
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", list);
-		map.put("nowPage", nowPage);
-		map.put("startPage", startPage);
-		map.put("endPage", endPage);
-		map.put("page", page);
-		return ResponseEntity.ok(map);
+	public ResponseEntity<Object> getBranchOrders(@PathVariable("branchCode") String branchCode){
+		List<OrderDtoWithNo> list= orderProcess.getBranchOrders(branchCode);
+		return ResponseEntity.ok(list);
 	}
 	@PostMapping
 	public ResponseEntity<Object> insertOrder(@RequestBody Map<String, Object> req){
