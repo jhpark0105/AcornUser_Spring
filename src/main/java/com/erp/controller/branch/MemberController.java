@@ -1,4 +1,4 @@
-package com.erp.controller;
+package com.erp.controller.branch;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.transaction.Transactional;
 import com.erp.entity.Member;
-import com.erp.process.MemberProcess;
+import com.erp.process.branch.MemberProcess;
 import com.erp.dto.MemberDto;
 
 @RestController

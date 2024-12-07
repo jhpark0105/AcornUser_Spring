@@ -1,4 +1,4 @@
-package com.erp.controller;
+package com.erp.controller.branch;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erp.dto.DashboardReservationDto;
 import com.erp.dto.NoticeDto;
 import com.erp.dto.ProductDto;
-import com.erp.process.DashboardProcess;
-import com.erp.process.NoticeProcess;
+import com.erp.process.branch.DashboardProcess;
+import com.erp.process.branch.NoticeProcess;
 import com.erp.response.PageResponse;
 import com.erp.response.ResponseJson;
 import com.erp.response.ResponseMessages;

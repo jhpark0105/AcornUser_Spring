@@ -1,4 +1,4 @@
-package com.erp.controller;
+package com.erp.controller.branch;
 
 import java.util.List;
 import java.util.Map;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.dto.ServiceDto;
-import com.erp.process.ServiceProcess;
+import com.erp.process.branch.ServiceProcess;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
