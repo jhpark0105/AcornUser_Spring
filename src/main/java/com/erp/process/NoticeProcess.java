@@ -1,7 +1,9 @@
 package com.erp.process;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -33,11 +35,11 @@ public class NoticeProcess {
 	    
 	    // 일반 공지 페이징 계산
 	    int normalNoticesPerPage = pageSize - checkedNoticeCount;
-	    int normalNoticePageNo = pageable.getPageNumber();
+	    int pageNo = pageable.getPageNumber();
 	    
 	    // 일반공지를 페이징하여 가져옴
 	    Page<Notice> normalNotice = noticeRepository.findByNoticeCheckOrderByNoticeNoDesc(
-	        false, PageRequest.of(normalNoticePageNo, normalNoticesPerPage));
+	        false, PageRequest.of(pageNo, normalNoticesPerPage));
 	    
 	    // 일반 공지 수 계산
 	    int normalNoticeCount = (int)normalNotice.getTotalElements();
@@ -48,7 +50,7 @@ public class NoticeProcess {
 
 	    List<NoticeDto> joinedNotice = new ArrayList<>();
 	    
-	    if(pageable.getPageNumber() >= totalPages) {
+	    if(pageNo >= totalPages) {
 			// 페이지번호 요청한계 초과 시: 빈 페이지 반환
 			return new PageImpl<NoticeDto>(joinedNotice, pageable, 0);
 		} else {
@@ -60,7 +62,7 @@ public class NoticeProcess {
 			
 			// 결합된 리스트와 페이징정보를 포함한 PageImpl객체 반환
 			return new PageImpl<NoticeDto>(joinedNotice, PageRequest.of(
-			    	pageable.getPageNumber(), pageSize), totalItems);
+					pageNo, pageSize), totalItems);
 		}
 	}
 
@@ -95,4 +97,61 @@ public class NoticeProcess {
 		return noticeRepository.getCheckedNoticeList()
 					.stream().map(Notice::toDto).collect(Collectors.toList());
 	}
+	
+	// 공지 작성
+	public Map<String, Object> insert(NoticeDto dto) {
+		Map<String, Object> response = new HashMap<String, Object>();
+		try {
+			Notice newData = Notice.of(dto);
+			noticeRepository.save(newData);
+			response.put("isSuccess", true);
+			response.put("message", "공지를 작성하였습니다.");
+		} catch (Exception e) {
+			response.put("isSuccess", false);
+			response.put("message", "공지 작성중 오류발생: " + e.getMessage());
+		}
+		return response;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

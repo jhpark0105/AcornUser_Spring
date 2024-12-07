@@ -1,11 +1,15 @@
 package com.erp.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,5 +45,11 @@ public class NoticeController {
 		} else { // 검색어를 입력했을 경우
 			return noticeProcess.selectSearched(noticeTitle, pageable); // 검색결과 페이징
 		}
+	}
+	
+	// 공지 작성
+	@PostMapping
+	public Map<String, Object> insertData(@RequestBody NoticeDto dto) {
+		return noticeProcess.insert(dto);
 	}
 }
