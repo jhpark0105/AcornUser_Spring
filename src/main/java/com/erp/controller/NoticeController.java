@@ -52,4 +52,10 @@ public class NoticeController {
 	public Map<String, Object> insertData(@RequestBody NoticeDto dto) {
 		return noticeProcess.insert(dto);
 	}
+	
+	// 방금 작성한 공지번호 가져오기
+	@GetMapping("/latest")
+	public Map<String, Object> getLatestNo(){
+		return noticeProcess.selectLatestNo();
+	}
 }
