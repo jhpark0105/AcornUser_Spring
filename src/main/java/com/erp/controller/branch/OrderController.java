@@ -32,7 +32,6 @@ public class OrderController {
 	//branch별 발주 목록 요청
 	@GetMapping("/{branchCode}")
 	public ResponseEntity<Object> getBranchOrders(@PathVariable("branchCode") String branchCode){
-		System.out.println(1);
 		List<OrderDto> list= orderProcess.getBranchOrders(branchCode);
 		return ResponseEntity.ok(list);
 	}
