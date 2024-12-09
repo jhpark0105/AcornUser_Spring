@@ -10,10 +10,12 @@ import com.erp.repository.OrderRepository;
 
 @Repository
 public class OrderProcess {
+	//OrderRepository 의존성 주입
 	private OrderRepository orderRepository;
 	public OrderProcess(OrderRepository orderRepository) {
 		this.orderRepository = orderRepository;
 	}
+	
 	public List<OrderDtoWithNo> getAllOrderList(){
 	    return orderRepository.findAll().stream()
 	    		.map(OrderDtoWithNo::fromEntity)

@@ -30,6 +30,7 @@ public class OrderController {
 		this.orderProcess = orderProcess;
 		this.branchProcess=branchProcess;
 	}
+	//전체 발주 목록 요청
 	@GetMapping
 	public ResponseEntity<Object> getAllOrderList(@PathVariable("branchCode") String branchCode){
 		List<OrderDtoWithNo> list= orderProcess.getAllOrderList();
