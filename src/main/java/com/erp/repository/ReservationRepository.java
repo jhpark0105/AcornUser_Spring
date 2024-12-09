@@ -10,12 +10,6 @@ import org.springframework.data.repository.query.Param;
 import com.erp.entity.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
-//	@Query("SELECT r FROM Reservation r JOIN FETCH r.customer JOIN FETCH r.service JOIN FETCH r.member")
-//	List<Reservation> findAllWithDetails();
-//	@Query("SELECT r.reservationNo, s.serviceName, r.reservationDate, r.reservationTime, c.customerName, m.memberName, r.reservationComm"
-//			+ " FROM Reservation r JOIN FETCH r.customer c JOIN FETCH r.service s JOIN FETCH r.member m")
-//	List<Reservation> findReservationDataWithDetails();
-
 	 //고객명 -> 고객 ID 조회
     @Query("SELECT c.customerId FROM Customer c WHERE c.customerName = :customerName")
     Integer findCustomerIdByName(@Param("customerName") String customerName);
