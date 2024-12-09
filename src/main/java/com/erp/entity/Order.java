@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +41,10 @@ public class Order {
 	
 	@Column(name = "orders_end_date")
 	private LocalDate ordersEndDate;	//발주 마감일
+	
+	@Column(name = "orders_status", columnDefinition = "TINYINT DEFAULT 0")
+	private Integer ordersStatus;	//발주 상태
+
     @OneToOne
     @JoinColumn(name = "product_code", nullable = false)
     @JsonBackReference
