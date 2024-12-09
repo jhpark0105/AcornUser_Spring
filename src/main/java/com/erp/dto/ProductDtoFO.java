@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDtoFO {
+public class ProductDtoFO {	//상품발주 모달을 위한 상품Dto
     private String productCode; //상품 소분류 코드
     private String productName; //상품 이름
     private int productPrice; //상품 가격
@@ -33,8 +33,7 @@ public class ProductDtoFO {
     public static Product toEntity(ProductDtoFO dto) {
     	ProductBDto bdto = new ProductBDto();
     	bdto.setProductBCode(dto.productBDto.getProductBCode());
-    	bdto.setProductBName(dto.productBDto.getProductBName());
-    	
+    	bdto.setProductBName(dto.productBDto.getProductBName());    	
         return Product.builder()
                 .productCode(dto.productCode)
                 .productName(dto.productName)

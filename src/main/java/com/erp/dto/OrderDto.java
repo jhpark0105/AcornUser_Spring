@@ -12,13 +12,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto {
-	private Integer ordersEa;
-	private Integer ordersPrice;
-	private LocalDate ordersApplyDate;
-	private LocalDate ordersEndDate;
-	private ProductDtoFO productDtoFO;
-	private BranchDto branchDto;
+public class OrderDto {//orders_no은 자동생성이고 화면에도 노출할 필요가 없어서 제외
+	private Integer ordersEa;	//발주 신청한 상품 개수
+	private Integer ordersPrice;	//발주 신청한 상품 금액(상품가격*ordersEa)
+	private LocalDate ordersApplyDate;	//발주 신청일
+	private LocalDate ordersEndDate;	//발주 마감일
+	private ProductDtoFO productDtoFO;	//상품 발주를 위한 상품 Dto
+	private BranchDto branchDto;	//참조를 위한 BranchDto
+    //Entity -> DTO 변환 메서드
 	public static OrderDto fromEntity(Order entity) {
 		return OrderDto.builder()
 				.ordersEa(entity.getOrdersEa())
@@ -29,6 +30,7 @@ public class OrderDto {
 				.branchDto(BranchDto.fromEntity(entity.getBranch()))
 				.build();
 	}
+    //DTO -> Entity 변환 메서드
 	public static Order toEntity(OrderDto dto) {
 		return Order.builder()
 				.ordersEa(dto.getOrdersEa())
