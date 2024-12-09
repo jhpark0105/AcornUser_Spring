@@ -25,6 +25,7 @@ import com.erp.process.branch.OrderProcess;
 public class OrderController {
 	private OrderProcess orderProcess;
 	private BranchProcess branchProcess;
+	//의존성 주입
 	public OrderController(OrderProcess orderProcess,BranchProcess branchProcess) {
 		this.orderProcess = orderProcess;
 		this.branchProcess=branchProcess;
@@ -35,9 +36,10 @@ public class OrderController {
 		List<OrderDto> list= orderProcess.getBranchOrders(branchCode);
 		return ResponseEntity.ok(list);
 	}
+	//상품발주 버튼 요청
 	@PostMapping
 	public ResponseEntity<Object> insertOrder(@RequestBody Map<String, Object> req){
-		//요청으로 들어온 json타입 데이터을 insert하기 위해 OrderDto에 담는 과정  
+		//요청으로 들어온 json타입 데이터를 insert하기 위해 OrderDto에 담는 과정  
 		//Order 엔티티의 날짜 타입(LocalDate)로의 캐스팅이 필요하다
 		String date1 = (String) req.get("ordersApplyDate");
 		LocalDate ordersApplyDate = LocalDate.parse(date1);	//발주 등록일
