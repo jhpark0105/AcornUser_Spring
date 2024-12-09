@@ -34,4 +34,21 @@ public class AdminNoticeProcess {
 	public Map<String, Object> selectLatestNo() {
 		return Map.of("noticeNo", noticeRepository.findFirstByOrderByNoticeNoDesc().getNoticeNo());
 	}
+	
+	// == Update: 기존 공지 수정 =======================================================================
+	/* 수정중
+	public Map<String, Object> update(NoticeDto dto) {
+		Map<String, Object> response = new HashMap<String, Object>();
+		try {
+			Notice updatedData = Notice.of(dto);
+			noticeRepository.save(updatedData);
+			response.put("isSuccess", true);
+			response.put("message", "공지를 수정하였습니다.");
+		} catch (Exception e) {
+			response.put("isSuccess", false);
+			response.put("message", "공지 수정중 오류 발생: " + e.getMessage());
+		}
+		return response;
+	}
+	*/
 }

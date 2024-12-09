@@ -26,6 +26,7 @@ public class NoticeProcess {
 	public Page<NoticeDto> selectAll(Pageable pageable){
 	    // 중요공지 전부 가져옴
 	    List<Notice> checkedNotice = noticeRepository.findByNoticeCheckOrderByNoticeNoDesc(true);
+	    // 중요 공지 수 계산하여 할당
 	    int checkedNoticeCount = checkedNotice.size();
 
 	    // 페이지 크기 설정 (고정 + 일반)
@@ -46,6 +47,7 @@ public class NoticeProcess {
 	    // 페이징처리를 위한 totalItems 계산
 	    int totalItems = normalNoticeCount + checkedNoticeCount * totalPages;
 
+	    // 중요/일반 공지를 함께 담는 배열객체 생성
 	    List<NoticeDto> joinedNotice = new ArrayList<>();
 	    
 	    if(pageNo >= totalPages) {
@@ -60,7 +62,7 @@ public class NoticeProcess {
 			
 			// 결합된 리스트와 페이징정보를 포함한 PageImpl객체 반환
 			return new PageImpl<NoticeDto>(joinedNotice, PageRequest.of(
-					pageNo, pageSize), totalItems);
+				pageNo, pageSize), totalItems);
 		}
 	}
 
@@ -73,6 +75,7 @@ public class NoticeProcess {
 	    NoticeNoOnly prevNotice = noticeRepository.findFirstByNoticeNoLessThanOrderByNoticeNoDesc(noticeNo);
 	    NoticeNoOnly nextNotice = noticeRepository.findFirstByNoticeNoGreaterThanOrderByNoticeNoAsc(noticeNo);
 
+	    // 이전/이후 공지가 존재하면 해당하는 번호 할당, 없으면 null 할당
 	    return NoticeDto.builder()
 	        .noticeNo(currentNotice.getNoticeNo())
 	        .noticeTitle(currentNotice.getNoticeTitle())
@@ -94,6 +97,6 @@ public class NoticeProcess {
 	// 중요 공지 목록 읽기
 	public List<NoticeDto> getCheckedNoticeList() {
 		return noticeRepository.getCheckedNoticeList()
-					.stream().map(Notice::toDto).collect(Collectors.toList());
+			.stream().map(Notice::toDto).collect(Collectors.toList());
 	}
 }

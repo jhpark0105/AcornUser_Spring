@@ -22,10 +22,10 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer>{
 	@Query("SELECT n FROM Notice n WHERE n.noticeCheck=true ORDER BY n.noticeReg desc")
 	List<Notice> getCheckedNoticeList();
 
-	// 이전/다음버튼 클릭 시 해당하는 공지번호 쿼리용
+	// 이전/다음버튼 클릭 시 해당하는 공지번호를 가져오기 위한 메서드
 	NoticeNoOnly findFirstByNoticeNoLessThanOrderByNoticeNoDesc(int currentNo);
 	NoticeNoOnly findFirstByNoticeNoGreaterThanOrderByNoticeNoAsc(int currentNo);
 	
-	// 공지작성 후 최근 공지번호 가져오기
+	// 공지작성 후 최근 공지번호를 가져오기 위한 메서드
 	NoticeNoOnly findFirstByOrderByNoticeNoDesc();
 }
