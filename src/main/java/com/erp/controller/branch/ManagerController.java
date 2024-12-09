@@ -35,7 +35,7 @@
 //	}
 //}
 
-package com.erp.controller;
+package com.erp.controller.branch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.dto.ManagerDto;
 import com.erp.entity.Manager;
-import com.erp.process.ManagerProcess;
+import com.erp.process.branch.ManagerProcess;
 import com.erp.provider.JwtProvider;
 
 @RestController

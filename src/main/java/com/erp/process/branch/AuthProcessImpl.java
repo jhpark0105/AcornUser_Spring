@@ -1,4 +1,4 @@
-package com.erp.process;
+package com.erp.process.branch;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -169,7 +169,7 @@ public class AuthProcessImpl implements AuthProcess {
                     .httpOnly(true)   // 클라이언트 스크립트에서 접근 불가
                     .secure(true)     // HTTPS에서만 쿠키 전송(true), HTTP도 가능(false)
                     .path("/")        // 쿠키가 유효한 경로 설정
-                    .maxAge(3600)     // 쿠키 만료 시간 (초 단위)
+                    .maxAge(86400)     // 쿠키 만료 시간 (초 단위) (3600에서 24시간으로 바꿈)
                     .sameSite("None") // CSRF 보호를 위한 SameSite 설정, 크로스 도메인에서 쿠키 전송 허용(None), 동일 도메인(Strict), 상호작용이 필요한 상황에만 쿠키 전송(Lax)
                     .build();
             

@@ -1,4 +1,4 @@
-package com.erp.controller;
+package com.erp.controller.branch;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.erp.dto.BranchDto;
 import com.erp.dto.OrderDto;
-import com.erp.dto.OrderDtoWithNo;
 import com.erp.dto.ProductBDto;
 import com.erp.dto.ProductDtoFO;
-import com.erp.process.BranchProcess;
-import com.erp.process.OrderProcess;
+import com.erp.process.branch.BranchProcess;
+import com.erp.process.branch.OrderProcess;
 @RestController
 @RequestMapping("/order")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -30,16 +29,10 @@ public class OrderController {
 		this.orderProcess = orderProcess;
 		this.branchProcess=branchProcess;
 	}
-	//전체 발주 목록 요청
-	@GetMapping
-	public ResponseEntity<Object> getAllOrderList(@PathVariable("branchCode") String branchCode){
-		List<OrderDtoWithNo> list= orderProcess.getAllOrderList();
-		return ResponseEntity.ok(list);
-	}
 	//branch별 발주 목록 요청
 	@GetMapping("/{branchCode}")
 	public ResponseEntity<Object> getBranchOrders(@PathVariable("branchCode") String branchCode){
-		List<OrderDtoWithNo> list= orderProcess.getBranchOrders(branchCode);
+		List<OrderDto> list= orderProcess.getBranchOrders(branchCode);
 		return ResponseEntity.ok(list);
 	}
 	@PostMapping
@@ -62,7 +55,7 @@ public class OrderController {
 		 * ArrayList<LinkedHashMap<String, Object>> cartArray를 생성한다.
 		 * */
 		ArrayList<LinkedHashMap<String, Object>> cartArray=(ArrayList<LinkedHashMap<String, Object>>)req.get("cart");
-		//다행히 collection이라 stream사용이 가능하다. 각 요소별로 insert작업만 진행하고 따로 반환할 필요가 없으니 forEach를 사용한다. 
+		//각 요소별로 insert작업만 진행하고 따로 반환할 필요가 없으니 forEach를 사용한다. 
 		cartArray.stream()
 			.forEach(product-> {
 				//cart의 각 요소(객체)를 담아줄 그릇인 OrderDto를 생성한다.

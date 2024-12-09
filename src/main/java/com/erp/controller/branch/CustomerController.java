@@ -1,4 +1,4 @@
-package com.erp.controller;
+package com.erp.controller.branch;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erp.dto.CustomerDto;
-import com.erp.process.CustomerProcess;
+import com.erp.process.branch.CustomerProcess;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")

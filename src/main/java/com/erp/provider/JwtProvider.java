@@ -21,8 +21,8 @@ public class JwtProvider {
 	
 	// JWT 생성
     public String create(String id) {
-        // JWT 만료 시간 설정 (1시간 후)
-        Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
+        // JWT 만료 시간 설정 (24시간 후)
+        Date expiredDate = Date.from(Instant.now().plus(24, ChronoUnit.HOURS));
 
         // JWT 생성
         String jwt = Jwts.builder()

@@ -1,4 +1,4 @@
-package com.erp.controller;
+package com.erp.controller.branch;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +20,7 @@ import com.erp.dto.ProductDto;
 import com.erp.dto.ProductDtoFO;
 import com.erp.entity.Product;
 import com.erp.entity.Product_B;
-import com.erp.process.ProductProcess;
+import com.erp.process.branch.ProductProcess;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000") // React 서버 주소
