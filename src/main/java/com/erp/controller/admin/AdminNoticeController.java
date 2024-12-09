@@ -58,9 +58,17 @@ public class AdminNoticeController {
 		return adminProcess.insert(dto);
 	}
 	
-	// 방금 작성한 공지번호 가져오기
+	// 공지작성 후 방금 작성한 공지 상세페이지로 전환하기 위해 가장 최근에 작성한 공지번호 가져오기
 	@GetMapping("/latest")
 	public Map<String, Object> getLatestNo(){
 		return adminProcess.selectLatestNo();
 	}
+
+	// == Update: 기존 공지 수정 =======================================================================
+	/* 수정중
+	@PutMapping("/{no}")
+	public Map<String, Object> updateData(@RequestBody NoticeDto dto) {
+		return adminProcess.update(dto);
+	}
+	*/
 }
