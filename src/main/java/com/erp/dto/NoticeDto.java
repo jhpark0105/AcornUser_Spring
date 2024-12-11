@@ -17,4 +17,8 @@ public class NoticeDto {
 	private String noticeContent;
 	private LocalDate noticeReg;
 	private boolean noticeCheck;
+	
+	// 상세페이지의 이동 버튼 구현용
+	private Integer prevNo;
+	private Integer nextNo;
 }
