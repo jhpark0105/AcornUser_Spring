@@ -30,7 +30,7 @@ public class SignUpRequestDto {
 	private String adminName;
 	
 	@NotBlank
-	@Past // 과거 날짜만 허용
+//	@Past // 과거 날짜만 허용
 	@Pattern(regexp = "^\\d{8}$") // 숫자 8자리로 입력
 	private String adminBirth;
 	
