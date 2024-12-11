@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +37,15 @@ public class OrderController {
 		List<OrderDto> list= orderProcess.getBranchOrders(branchCode);
 		return ResponseEntity.ok(list);
 	}
+	
+	//지점별&날짜별 발주 목록
+	@GetMapping("/{branchCode}/{ordersApplyDate}/{ordersEndDate}")
+	public List<OrderDto> getBranchDateOrders(@PathVariable("branchCode") String branchCode, 
+											  @PathVariable("ordersApplyDate") LocalDate ordersApplyDate,
+											  @PathVariable("ordersEndDate") LocalDate ordersEndDate) {
+		return orderProcess.getBranchDateOrders(branchCode, ordersApplyDate, ordersEndDate);
+	}
+	
 	//상품발주 버튼 요청
 	@PostMapping
 	public ResponseEntity<Object> insertOrder(@RequestBody Map<String, Object> req){
@@ -90,4 +100,11 @@ public class OrderController {
 		return ResponseEntity.ok().build();
 	}
 	
+	//발주 상태 변화
+	@PutMapping("/{branchCode}/{ordersApplyDate}/{ordersEndDate}")
+	public int changeOrderStatus(@PathVariable("branchCode") String branchCode, 
+			  								@PathVariable("ordersApplyDate") LocalDate ordersApplyDate,
+			  								@PathVariable("ordersEndDate") LocalDate ordersEndDate) {
+		return (int)orderProcess.changeOrderStatus(branchCode, ordersApplyDate, ordersEndDate);
+	}
 }
