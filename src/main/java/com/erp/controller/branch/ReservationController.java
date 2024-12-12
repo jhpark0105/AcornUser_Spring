@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,8 @@ import com.erp.process.branch.ReservationProcess;
 public class ReservationController {
 	@Autowired
 	private ReservationProcess reservationProcess;
-	
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
     // 서비스 목록 조회
     @GetMapping("/reservation/service")
     public List<ServiceDto> getServiceList() {
@@ -59,8 +61,11 @@ public class ReservationController {
     @PostMapping("/reservation")
     public Map<String, Object> insertData(@RequestBody ReservationDto reservationDto) {
         reservationProcess.insertReservation(reservationDto);
+
+        // WebSocket으로 알림 전송
+        messagingTemplate.convertAndSend("/topic/reservations", "새로운 예약이 등록되었습니다!");
+
         Map<String, Object> map = new HashMap<>();
-        System.out.println("Received Reservation: " + reservationDto);
         map.put("isSuccess", true);
         return map;
     }
