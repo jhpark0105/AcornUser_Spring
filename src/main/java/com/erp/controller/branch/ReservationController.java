@@ -47,15 +47,29 @@ public class ReservationController {
         return reservationProcess.getAllMembers();  // 직원 목록을 반환
     }
 
-    // 예약 목록 조회
+    // 예약 전체 목록 조회
     @GetMapping("/reservation")
     public Object getList() {
         return reservationProcess.getData();
     }
-//    @GetMapping("/reservation")
-//    public List<ReservationDto> getList(){
-//    	return reservationProcess.getData();
-//    }
+
+    //예약 현황 리스트 조회
+    @GetMapping("/reservation/confirm")
+    public List<ReservationDto> getConfirmList() {
+        return reservationProcess.getReservationsWithStatusZero();
+    }
+
+    //예약 완료 리스트 조회
+    @GetMapping("/reservation/finish")
+    public List<ReservationDto> getFinishList() {
+        return reservationProcess.getReservationsWithStatusOne();
+    }
+
+    //예약 취소 리스트 조회
+    @GetMapping("/reservation/cancel")
+    public List<ReservationDto> getCancelList() {
+        return reservationProcess.getReservationsWithStatusTwo();
+    }
 
     // 예약 추가
     @PostMapping("/reservation")
@@ -71,11 +85,11 @@ public class ReservationController {
     }
 
     // 예약 삭제
-    @DeleteMapping("/reservation/{reservationNo}")
-    public Map<String, Object> deleteData(@PathVariable("reservationNo") int reservationNo) {
-        reservationProcess.delete(reservationNo);
-        return Map.of("isSuccess", true);
-    }
+//    @DeleteMapping("/reservation/{reservationNo}")
+//    public Map<String, Object> deleteData(@PathVariable("reservationNo") int reservationNo) {
+//        reservationProcess.delete(reservationNo);
+//        return Map.of("isSuccess", true);
+//    }
 
     // 예약 수정
     @PutMapping("/reservation/{reservationNo}")
@@ -84,9 +98,18 @@ public class ReservationController {
         reservationProcess.update(reservationDto);
         return Map.of("isSuccess", true);
     }
-//    @PutMapping("/reservation/{reservationNo}")
-//    public Map<String, Object> updateData(@RequestBody ReservationDto reservationDto){
-//    	reservationProcess.update(reservationDto);
-//    	return Map.of("isSuccess",true);
-//    }
+
+
+    // 예약 완료(확정) 상태 수정
+    @PutMapping("/reservation/{reservationNo}/finish")
+    public Map<String, Object> finishReservation(@PathVariable("reservationNo") int reservationNo, @RequestBody ReservationDto reservationDto) {
+            // 예약 번호 설정
+            reservationDto.setReservationNo(reservationNo);
+
+            // 예약 상태 완료 처리
+            reservationProcess.reservationFinish(reservationDto);
+
+            // 성공 응답 반환
+            return Map.of("isSuccess", true);
+    }
 }
