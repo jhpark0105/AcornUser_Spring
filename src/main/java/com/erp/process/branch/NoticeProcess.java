@@ -1,7 +1,9 @@
 package com.erp.process.branch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -11,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.erp.dto.NoticeDto;
 import com.erp.dto.NoticeNoOnly;
@@ -98,5 +101,39 @@ public class NoticeProcess {
 	public List<NoticeDto> getCheckedNoticeList() {
 		return noticeRepository.getCheckedNoticeList()
 			.stream().map(Notice::toDto).collect(Collectors.toList());
+	}
+	
+	//공지 등록
+	public Map<String, Object> insert(NoticeDto dto) {
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		try {
+			Notice newData = Notice.of(dto);
+			noticeRepository.save(newData);
+			
+			response.put("isSuccess", true);
+			response.put("message", "공지를 작성하였습니다.");
+		} catch (Exception e) {
+			response.put("isSuccess", false);
+			response.put("message", "공지 작성중 오류발생: " + e.getMessage());
+		}
+		return response;
+	}
+	
+	// 방금 작성한 공지번호 가져오기
+	public Map<String, Object> selectLatestNo() {
+		return Map.of("noticeNo", noticeRepository.findFirstByOrderByNoticeNoDesc().getNoticeNo());
+	}
+	
+	//공지 삭제
+	@Transactional
+	public String deleteNotice(int noticeNo) {
+		if(!noticeRepository.existsById(noticeNo)) {
+			return "해당 번호의 공지가 존재하지 않습니다.";
+		}
+		
+		noticeRepository.deleteById(noticeNo);
+		
+		return "isSuccess";
 	}
 }
