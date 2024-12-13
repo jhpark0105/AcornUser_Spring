@@ -22,6 +22,7 @@ public class ReservationDto {
 	private String reservationDate;
 	private String reservationTime;
 	private String reservationComm;
+	private int reservationStatus;
 	private int customerId;
 	private String customerName;
 	private String memberId;
@@ -42,6 +43,7 @@ public class ReservationDto {
 	    reservation.setReservationDate(reservationDate);
 	    reservation.setReservationTime(reservationTime);
 	    reservation.setReservationComm(reservationComm);
+		reservation.setReservationStatus(reservationStatus);
 	    reservation.setCustomer(customer);
 	    reservation.setService(service);
 	    reservation.setMember(member);
@@ -55,6 +57,7 @@ public class ReservationDto {
     			.reservationDate(reservation.getReservationDate())
     			.reservationTime(reservation.getReservationTime())
     			.reservationComm(reservation.getReservationComm())
+				.reservationStatus(reservation.getReservationStatus())
     			.customerId(reservation.getCustomer().getCustomerId())
     			.customerName(reservation.getCustomer().getCustomerName())
     			.serviceCode(reservation.getService().getServiceCode())
