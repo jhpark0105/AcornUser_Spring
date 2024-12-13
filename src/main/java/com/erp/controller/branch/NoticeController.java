@@ -52,7 +52,9 @@ public class NoticeController {
 	// 공지 작성
 	@PostMapping
 	public Map<String, Object> insertData(@RequestBody NoticeDto dto) {
-		return noticeProcess.insert(dto);
+		 Map<String, Object> response = noticeProcess.insert(dto);
+		 
+		 return response;
 	}
 	
 	// 공지작성 후 방금 작성한 공지 상세페이지로 전환하기 위해 가장 최근에 작성한 공지번호 가져오기

@@ -26,6 +26,10 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer>{
 	NoticeNoOnly findFirstByNoticeNoLessThanOrderByNoticeNoDesc(int currentNo);
 	NoticeNoOnly findFirstByNoticeNoGreaterThanOrderByNoticeNoAsc(int currentNo);
 	
+	//중요 공지 개수가 5개 이하인지 확인
+	@Query("SELECT COUNT(n) FROM Notice n WHERE n.noticeCheck = true")
+	long countNoticesWithNoticeCheck();
+	
 	// 공지작성 후 최근 공지번호를 가져오기 위한 메서드
 	NoticeNoOnly findFirstByOrderByNoticeNoDesc();
 }

@@ -108,6 +108,15 @@ public class NoticeProcess {
 		Map<String, Object> response = new HashMap<String, Object>();
 		
 		try {
+			long count = noticeRepository.countNoticesWithNoticeCheck();
+			
+			// 중요 공지가 5개를 초과할 수 없도록 제한
+	        if (count >= 5) {
+	            response.put("isSuccess", false);
+	            response.put("message", "중요 공지는 5개를 넘을 수 없습니다.");
+	            return response;
+	        }
+			
 			Notice newData = Notice.of(dto);
 			noticeRepository.save(newData);
 			
