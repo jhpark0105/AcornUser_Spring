@@ -101,24 +101,16 @@ public class ProductController {
   	@PutMapping("/product/edit/{productCode}")
   	public Map<String, Object> updateProcess(@RequestBody ProductDto productDto,
   											 @PathVariable("productCode") String productCode) {
-  		productProcess.updateProduct(productDto);
+  		Map<String, Object> response = productProcess.updateProduct(productDto);
   		
-  		Map<String, Object> map = new HashMap<>();
-  		
-  		map.put("isSuccess", true);
-  		
-  		return map;
+  		return response;
   	}
     
     //소분류 삭제
     @DeleteMapping("/product/{productCode}")
     public Map<String, Object> deleteProcess(@PathVariable("productCode") String productCode) {
-    	productProcess.deleteProduct(productCode);
-        
-    	Map<String, Object> map = new HashMap<>();
+    	Map<String, Object> response = productProcess.deleteProduct(productCode);
   		
-  		map.put("isSuccess", true);
-  		
-  		return map;
+  		return response;
     }
 }
