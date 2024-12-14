@@ -111,7 +111,7 @@ public class NoticeProcess {
 	        // 중요 공지일 경우만 제한 조건 검사를 수행
 	        if (dto.isNoticeCheck()) {
 	            long count = noticeRepository.countNoticesWithNoticeCheck();
-	            
+
 	            // 중요 공지가 5개를 초과할 수 없도록 제한
 	            if (count >= 5) {
 	                response.put("isSuccess", false);
@@ -119,11 +119,22 @@ public class NoticeProcess {
 	                return response;
 	            }
 	        }
-	        
-	        // 공지 저장
+
+	        // 가장 큰 공지 번호 조회
+	        Integer maxNoticeNo = noticeRepository.findMaxNoticeNo();
+	        if (maxNoticeNo == null) {
+	            maxNoticeNo = 0; // 공지가 없을 경우 0으로 초기화
+	        }
+
+	        // 새 공지 생성
 	        Notice newData = Notice.of(dto);
+
+	        // 다음 공지 번호 수동 설정
+	        newData.setNoticeNo(maxNoticeNo + 1);
+
+	        // 공지 저장
 	        noticeRepository.save(newData);
-	        
+
 	        response.put("isSuccess", true);
 	        response.put("message", "공지를 작성하였습니다.");
 	    } catch (Exception e) {

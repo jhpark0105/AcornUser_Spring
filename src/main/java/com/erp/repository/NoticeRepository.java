@@ -30,6 +30,10 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer>{
 	@Query("SELECT COUNT(n) FROM Notice n WHERE n.noticeCheck = true")
 	long countNoticesWithNoticeCheck();
 	
+	//공지 등록 시, 가장 큰 공지 번호를 가져오기
+	@Query("SELECT MAX(n.noticeNo) FROM Notice n")
+	Integer findMaxNoticeNo();
+	
 	// 공지작성 후 최근 공지번호를 가져오기 위한 메서드
 	NoticeNoOnly findFirstByOrderByNoticeNoDesc();
 }
