@@ -59,15 +59,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r.reservationStatus FROM Reservation r WHERE r.reservationNo = :reservationNo")
     int findReservationStatusByReservationNo(@Param("reservationNo") int reservationNo);
 
-//    @Modifying
-//    @Query("UPDATE Reservation r SET r.reservationStatus = :reservationStatus WHERE r.reservationNo = :reservationNo")
-//    void updateReservationStatus(@Param("reservationNo") int reservationNo, @Param("reservationStatus") int reservationStatus);
-//@Modifying
-//@Query("UPDATE Reservation r SET r.reservationStatus = :status WHERE r.reservationNo = :reservationNo")
-//void updateReservationStatus(@Param("reservationNo") int reservationNo, @Param("status") int status);
-@Modifying
-@Query("UPDATE Reservation r SET r.reservationStatus = 1 WHERE r.reservationNo = :reservationNo")
-void updateReservationStatus(@Param("reservationNo") int reservationNo);
+    //예약 상태 변경(완료(확정))
+    @Modifying
+    @Query("UPDATE Reservation r SET r.reservationStatus = 1 WHERE r.reservationNo = :reservationNo")
+    int updateReservationStatusZero(@Param("reservationNo") int reservationNo);
+
+    //예약 상태 변경(취소)
+    @Modifying
+    @Query("UPDATE Reservation r SET r.reservationStatus = 2 WHERE r.reservationNo = :reservationNo")
+    int updateReservationStatusTwo(@Param("reservationNo") int reservationNo);
 
     //예약 등록(insert)
 //    @Modifying
