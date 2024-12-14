@@ -72,16 +72,37 @@ public class ProductProcess {
 	    }
 	}
 	
-	//대분류 삭제(번호가 없으면 오류)
+	// 대분류 삭제(소분류가 있으면 삭제할 수 없음)
 	@Transactional
-	public String deleteBProduct(String productCode) {
-		if (!productBRepository.existsById(productCode)) {
-            return "해당 번호의 데이터가 존재하지 않습니다.";
-        }
+	public Map<String, Object> deleteBProduct(String productCode) {
+	    Map<String, Object> response = new HashMap<>();
 
-		productBRepository.deleteById(productCode);
-        
-        return "isSuccess";
+	    try {
+	        // 대분류 코드 존재 여부 확인
+	        if (!productBRepository.existsById(productCode)) {
+	            response.put("isSuccess", false);
+	            response.put("message", "해당 번호의 데이터가 존재하지 않습니다.");
+	            return response;
+	        }
+
+	        // 해당 대분류에 소분류가 존재하는지 확인
+	        if (productRepository.existsByProductBCode(productCode)) {
+	            response.put("isSuccess", false);
+	            response.put("message", "해당 대분류에 소분류 상품이 존재합니다. 삭제할 수 없습니다.");
+	            
+	            return response;
+	        }
+
+	        // 대분류 삭제
+	        productBRepository.deleteById(productCode);
+	        response.put("isSuccess", true);
+	        response.put("message", "대분류 삭제 성공!");
+	    } catch (Exception e) {
+	        response.put("isSuccess", false);
+	        response.put("message", "삭제 중 오류 발생: " + e.getMessage());
+	    }
+
+	    return response;
 	}
 	
 	//소분류 목록 조회
