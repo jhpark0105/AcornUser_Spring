@@ -103,30 +103,34 @@ public class NoticeProcess {
 			.stream().map(Notice::toDto).collect(Collectors.toList());
 	}
 	
-	//공지 등록
+	// 공지 등록
 	public Map<String, Object> insert(NoticeDto dto) {
-		Map<String, Object> response = new HashMap<String, Object>();
-		
-		try {
-			long count = noticeRepository.countNoticesWithNoticeCheck();
-			
-			// 중요 공지가 5개를 초과할 수 없도록 제한
-	        if (count >= 5) {
-	            response.put("isSuccess", false);
-	            response.put("message", "중요 공지는 5개를 넘을 수 없습니다.");
-	            return response;
+	    Map<String, Object> response = new HashMap<>();
+
+	    try {
+	        // 중요 공지일 경우만 제한 조건 검사를 수행
+	        if (dto.isNoticeCheck()) {
+	            long count = noticeRepository.countNoticesWithNoticeCheck();
+	            
+	            // 중요 공지가 5개를 초과할 수 없도록 제한
+	            if (count >= 5) {
+	                response.put("isSuccess", false);
+	                response.put("message", "중요 공지는 5개를 넘을 수 없습니다.");
+	                return response;
+	            }
 	        }
-			
-			Notice newData = Notice.of(dto);
-			noticeRepository.save(newData);
-			
-			response.put("isSuccess", true);
-			response.put("message", "공지를 작성하였습니다.");
-		} catch (Exception e) {
-			response.put("isSuccess", false);
-			response.put("message", "공지 작성중 오류발생: " + e.getMessage());
-		}
-		return response;
+	        
+	        // 공지 저장
+	        Notice newData = Notice.of(dto);
+	        noticeRepository.save(newData);
+	        
+	        response.put("isSuccess", true);
+	        response.put("message", "공지를 작성하였습니다.");
+	    } catch (Exception e) {
+	        response.put("isSuccess", false);
+	        response.put("message", "공지 작성 중 오류 발생: " + e.getMessage());
+	    }
+	    return response;
 	}
 	
 	// 방금 작성한 공지번호 가져오기
