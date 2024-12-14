@@ -51,13 +51,9 @@ public class ProductController {
     //대분류 삭제
     @DeleteMapping("/productB/{productBCode}")
     public Map<String, Object> deleteBProcess(@PathVariable("productBCode") String productBCode) {
-    	productProcess.deleteBProduct(productBCode);
+    	Map<String, Object> response = productProcess.deleteBProduct(productBCode);
         
-        Map<String, Object> map = new HashMap<>();
-        
-        map.put("isSuccess", true);
-        
-        return map;
+        return response;
     }
     
     //소분류 목록 불러오기
