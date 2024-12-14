@@ -42,3 +42,4 @@ out/
 
 .classpath
 .metadata/
+src/main/resources/application.properties
