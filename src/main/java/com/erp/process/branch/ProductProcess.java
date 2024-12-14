@@ -87,7 +87,6 @@ public class ProductProcess {
 
 	        // 해당 대분류에 소분류가 존재하는지 확인
 	        if (productRepository.existsByProductBCode(productCode)) {
-	        	System.out.println("이거 탄거임?");
 	            response.put("isSuccess", false);
 	            response.put("message", "해당 대분류에 소분류 상품이 존재합니다. 삭제할 수 없습니다.");
 	            
