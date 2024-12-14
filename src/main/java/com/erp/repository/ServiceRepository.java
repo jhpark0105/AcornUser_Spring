@@ -10,4 +10,6 @@ import com.erp.entity.Service;
 
 public interface ServiceRepository extends JpaRepository<Service, String>{
 	List<ServiceDto> findByServiceCode(String serviceCode);
+
+	boolean existsById(String serviceCode);
 }
