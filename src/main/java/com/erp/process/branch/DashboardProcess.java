@@ -119,7 +119,9 @@ public class DashboardProcess {
 	 * 서비스 코드가 'S0' 으로 시작하는 서비스 
 	 */
 	public List<Service> getSingleService() {
-		return dashboardServiceRepository.findByServiceCodeContaining("S0%");
+		List<Service> services =  dashboardServiceRepository.findByServiceCodeContaining("S0%");
+		// 서비스 코드에 S0 존재하지 않는데 단일 품목일 경우 새로운 배열로 생성
+		return services != null ? services : new ArrayList<>();
 	}
 
 	/**
@@ -163,7 +165,11 @@ public class DashboardProcess {
 			
 			/* 복수 서비스 분할 작업 : 서비스 명에 , 구분자 포함 시 분할 후 데이터에 저장 */
 			for (String serviceName : name.split(",")) {
-				
+				// serviceName이 map 에 존재하는지 확인 후 접근
+				if (!map.containsKey(serviceName)) {
+					log.warn("Service '{}' not found in map. Skipping.", serviceName);
+					continue;
+				}
 				int beforeRevenue = map.get(serviceName).get(month-1);
 				int revenue = count * price;
 				map.get(serviceName).set(month-1, beforeRevenue + revenue);
