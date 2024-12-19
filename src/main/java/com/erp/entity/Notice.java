@@ -14,15 +14,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Notice {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
 	@Column(name = "notice_no")
 	private int noticeNo; // 공지 번호
 	

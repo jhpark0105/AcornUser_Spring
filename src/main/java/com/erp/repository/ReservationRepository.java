@@ -10,7 +10,24 @@ import org.springframework.data.repository.query.Param;
 import com.erp.entity.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
-	 //고객명 -> 고객 ID 조회
+	//예약 리스트 조회 (0:현황 , 1:완료, 2:취소)
+    //예약 현황 리스트 조회 ( reservation_status = 0)
+    @Query("SELECT r FROM Reservation r JOIN FETCH r.customer c JOIN FETCH r.service s " +
+            "JOIN FETCH r.member m WHERE r.reservationStatus = 0")
+    List<Reservation> findReservationsWithStatusZero();
+
+    //예약 완료 리스트 조회 ( reservation_status = 1)
+    @Query("SELECT r FROM Reservation r JOIN FETCH r.customer c JOIN FETCH r.service s " +
+            "JOIN FETCH r.member m WHERE r.reservationStatus = 1")
+    List<Reservation> findReservationsWithStatusNoOne();
+
+    //예약 취소 리스트 조회 ( reservation_status = 2)
+    @Query("SELECT r FROM Reservation r JOIN FETCH r.customer c JOIN FETCH r.service s " +
+            "JOIN FETCH r.member m WHERE r.reservationStatus = 2")
+    List<Reservation> findReservationsWithStatusTwo();
+
+
+    //고객명 -> 고객 ID 조회
     @Query("SELECT c.customerId FROM Customer c WHERE c.customerName = :customerName")
     Integer findCustomerIdByName(@Param("customerName") String customerName);
 
@@ -38,18 +55,32 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("SELECT r.member.memberId FROM Reservation r WHERE r.reservationNo = :reservationNo")
     String findMemberIdByReservationNo(@Param("reservationNo") int reservationNo);
 
-    //예약 등록(insert)
+    // 예약 코드 -> 예약 status 조회
+    @Query("SELECT r.reservationStatus FROM Reservation r WHERE r.reservationNo = :reservationNo")
+    int findReservationStatusByReservationNo(@Param("reservationNo") int reservationNo);
+
+    //예약 상태 변경(완료(확정))
     @Modifying
-    @Query(value = "INSERT INTO Reservation (reservationNo, reservationDate, reservationTime, reservationComm, customerId, serviceCode, memberId) "
-                 + "VALUES (:reservationNo, :reservationDate, :reservationTime, :reservationComm, :customerName, :serviceName, :memberName)", nativeQuery = true)
-    void saveReservation(@Param("reservationNo") int reservationNo,
-                         @Param("reservationDate") String reservationDate,
-                         @Param("reservationTime") String reservationTime,
-                         @Param("reservationComm") String reservationComm,
-                         @Param("customerName")String customerName,
-                         @Param("serviceName")String serviceName,
-                         @Param("memberName")String memberName
-                         );
+    @Query("UPDATE Reservation r SET r.reservationStatus = 1 WHERE r.reservationNo = :reservationNo")
+    int updateReservationStatusZero(@Param("reservationNo") int reservationNo);
+
+    //예약 상태 변경(취소)
+    @Modifying
+    @Query("UPDATE Reservation r SET r.reservationStatus = 2 WHERE r.reservationNo = :reservationNo")
+    int updateReservationStatusTwo(@Param("reservationNo") int reservationNo);
+
+    //예약 등록(insert)
+//    @Modifying
+//    @Query(value = "INSERT INTO Reservation (reservationNo, reservationDate, reservationTime, reservationComm, customerId, serviceCode, memberId) "
+//                 + "VALUES (:reservationNo, :reservationDate, :reservationTime, :reservationComm, :customerName, :serviceName, :memberName)", nativeQuery = true)
+//    void saveReservation(@Param("reservationNo") int reservationNo,
+//                         @Param("reservationDate") String reservationDate,
+//                         @Param("reservationTime") String reservationTime,
+//                         @Param("reservationComm") String reservationComm,
+//                         @Param("customerName")String customerName,
+//                         @Param("serviceName")String serviceName,
+//                         @Param("memberName")String memberName
+//                         );
 
     // 서비스 이용 횟수 증가
     @Modifying
