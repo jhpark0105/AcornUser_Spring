@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.erp.entity.Reservation;
 import com.erp.entity.alarm;
 import com.erp.process.branch.AlarmProcess;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,19 +55,28 @@ public class ReservationController {
 
     //예약 현황 리스트 조회
     @GetMapping("/reservation/confirm")
-    public List<ReservationDto> getConfirmList() {
+//    public List<ReservationDto> getConfirmList() {
+//        return reservationProcess.getReservationsWithStatusZero();
+//    }
+    public List<Reservation> getConfirmList() {
         return reservationProcess.getReservationsWithStatusZero();
     }
 
     //예약 완료 리스트 조회
     @GetMapping("/reservation/finish")
-    public List<ReservationDto> getFinishList() {
+//    public List<ReservationDto> getFinishList() {
+//        return reservationProcess.getReservationsWithStatusOne();
+//    }
+    public List<Reservation> getFinishList() {
         return reservationProcess.getReservationsWithStatusOne();
     }
 
     //예약 취소 리스트 조회
     @GetMapping("/reservation/cancel")
-    public List<ReservationDto> getCancelList() {
+//    public List<ReservationDto> getCancelList() {
+//        return reservationProcess.getReservationsWithStatusTwo();
+//    }
+    public List<Reservation> getCancelList() {
         return reservationProcess.getReservationsWithStatusTwo();
     }
 

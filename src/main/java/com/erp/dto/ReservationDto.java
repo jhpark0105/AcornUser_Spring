@@ -61,7 +61,7 @@ public class ReservationDto {
     			.customerId(reservation.getCustomer().getCustomerId())
     			.customerName(reservation.getCustomer().getCustomerName())
     			.serviceCode(reservation.getService().getServiceCode())
-    			.serviceName(reservation.getService().getServiceCode())
+    			.serviceName(reservation.getService().getServiceName())
     			.servicePrice(reservation.getService().getServicePrice())
     			.memberId(reservation.getMember().getMemberId())
     			.memberName(reservation.getMember().getMemberName())
