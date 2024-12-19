@@ -3,9 +3,12 @@ package com.erp.controller.branch;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.erp.entity.alarm;
+import com.erp.process.branch.AlarmProcess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +28,11 @@ import com.erp.process.branch.NoticeProcess;
 public class NoticeController {
 	@Autowired
 	private NoticeProcess noticeProcess;
-	
+    @Autowired
+    private AlarmProcess alarmProcess;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+
 	// 전체 페이징 및 조회
 	@GetMapping
 	public Page<NoticeDto> readAll(Pageable pageable){
@@ -52,11 +59,31 @@ public class NoticeController {
 	// 공지 작성
 	@PostMapping
 	public Map<String, Object> insertData(@RequestBody NoticeDto dto) {
-		 Map<String, Object> response = noticeProcess.insert(dto);
-		 
-		 return response;
+		// 공지사항 등록
+		Map<String, Object> response = noticeProcess.insert(dto);
+
+//		// 공지사항 번호 가져옴
+//		Integer noticeNo = (Integer) response.get("noticeNo");  // Object 타입을 Integer로 캐스팅
+//
+//		// 알림 메시지 생성
+//		String alarmContent = "새로운 공지사항이 등록되었습니다!";
+//
+//		// 알림 객체 생성 및 초기화
+//		alarm alarm = com.erp.entity.alarm.builder()
+//				.content(alarmContent)        // 알림 내용
+//				.noticeNo((long) noticeNo)    // 공지사항 번호 추가
+//				.build();
+//
+//		// 알림 DB에 저장
+//		alarmProcess.saveAlarm(alarm);
+//
+//		// WebSocket으로 알림 전송
+//		messagingTemplate.convertAndSend("/topic/notice", alarmContent);
+
+		return response;
 	}
-	
+
+
 	// 공지작성 후 방금 작성한 공지 상세페이지로 전환하기 위해 가장 최근에 작성한 공지번호 가져오기
 	@GetMapping("/latest")
 	public Map<String, Object> getLatestNo(){

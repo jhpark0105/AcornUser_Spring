@@ -24,7 +24,7 @@ public class AlarmController {
         // 알림 데이터를 ResponseEntity로 반환
         return ResponseEntity.ok(notifications);
     }
-//    @GetMapping 
+//    @GetMapping
 //    public ResponseEntity<?> getNotifications() {
 //        // 알림 데이터를 반환하는 로직 구현
 //        // 가령, DB에서 데이터를 가져오거나 임시 데이터를 반환
