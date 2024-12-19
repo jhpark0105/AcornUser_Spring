@@ -39,27 +39,36 @@ public class ReservationProcess {
 
 	//예약 리스트 조회 (0:현황 , 1:완료, 2:취소)
 	//예약 현황 리스트 조회 ( reservation_status = 0)
-	public List<ReservationDto> getReservationsWithStatusZero() {
-		List<Reservation> reservations = reservationRepository.findReservationsWithStatusZero();
-		return reservations.stream()
-				.map(ReservationDto::fromEntity)
-				.collect(Collectors.toList());
+//	public List<ReservationDto> getReservationsWithStatusZero() {
+//		List<Reservation> reservations = reservationRepository.findReservationsWithStatusZero();
+//		return reservations.stream()
+//				.map(ReservationDto::fromEntity)
+//				.collect(Collectors.toList());
+//	}
+	public List<Reservation> getReservationsWithStatusZero() {
+		return reservationRepository.findReservationsWithStatusZero();
 	}
 
 	//예약 완료 리스트 조회 ( reservation_status = 1)
-	public List<ReservationDto> getReservationsWithStatusOne() {
-		List<Reservation> reservations = reservationRepository.findReservationsWithStatusNoOne();
-		return reservations.stream()
-				.map(ReservationDto::fromEntity)
-				.collect(Collectors.toList());
+//	public List<ReservationDto> getReservationsWithStatusOne() {
+//		List<Reservation> reservations = reservationRepository.findReservationsWithStatusNoOne();
+//		return reservations.stream()
+//				.map(ReservationDto::fromEntity)
+//				.collect(Collectors.toList());
+//	}
+	public List<Reservation> getReservationsWithStatusOne() {
+		return reservationRepository.findReservationsWithStatusNoOne();
 	}
 
 	//예약 취소 리스트 조회 ( reservation_status = 2)
-	public List<ReservationDto> getReservationsWithStatusTwo() {
-		List<Reservation> reservations = reservationRepository.findReservationsWithStatusTwo();
-		return reservations.stream()
-				.map(ReservationDto::fromEntity)
-				.collect(Collectors.toList());
+//	public List<ReservationDto> getReservationsWithStatusTwo() {
+//		List<Reservation> reservations = reservationRepository.findReservationsWithStatusTwo();
+//		return reservations.stream()
+//				.map(ReservationDto::fromEntity)
+//				.collect(Collectors.toList());
+//	}
+	public List<Reservation> getReservationsWithStatusTwo() {
+		return reservationRepository.findReservationsWithStatusTwo();
 	}
 
 	
