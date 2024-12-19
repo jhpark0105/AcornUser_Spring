@@ -86,7 +86,7 @@ public class ReservationController {
         // 예약 처리
         reservationProcess.insertReservation(reservationDto);
 
-        // 고객명을 가져옵니다. (ReservationDto에서 고객명 필드가 있다고 가정)
+        // 고객명을 가져오기
         String customerName = reservationDto.getCustomerName();
 
 
