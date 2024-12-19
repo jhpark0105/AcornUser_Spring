@@ -5,18 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.erp.entity.Reservation;
 import com.erp.entity.alarm;
 import com.erp.process.branch.AlarmProcess;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.erp.dto.CustomerDto;
 import com.erp.dto.MemberDto;
@@ -60,19 +55,28 @@ public class ReservationController {
 
     //예약 현황 리스트 조회
     @GetMapping("/reservation/confirm")
-    public List<ReservationDto> getConfirmList() {
+//    public List<ReservationDto> getConfirmList() {
+//        return reservationProcess.getReservationsWithStatusZero();
+//    }
+    public List<Reservation> getConfirmList() {
         return reservationProcess.getReservationsWithStatusZero();
     }
 
     //예약 완료 리스트 조회
     @GetMapping("/reservation/finish")
-    public List<ReservationDto> getFinishList() {
+//    public List<ReservationDto> getFinishList() {
+//        return reservationProcess.getReservationsWithStatusOne();
+//    }
+    public List<Reservation> getFinishList() {
         return reservationProcess.getReservationsWithStatusOne();
     }
 
     //예약 취소 리스트 조회
     @GetMapping("/reservation/cancel")
-    public List<ReservationDto> getCancelList() {
+//    public List<ReservationDto> getCancelList() {
+//        return reservationProcess.getReservationsWithStatusTwo();
+//    }
+    public List<Reservation> getCancelList() {
         return reservationProcess.getReservationsWithStatusTwo();
     }
 
@@ -123,15 +127,17 @@ public class ReservationController {
 
 
     // 예약 완료(확정) 상태 수정
-    @PutMapping("/reservation/{reservationNo}/finish")
-    public Map<String, Object> finishReservation(@PathVariable("reservationNo") int reservationNo, @RequestBody ReservationDto reservationDto) {
-            // 예약 번호 설정
-            reservationDto.setReservationNo(reservationNo);
-
-            // 예약 상태 완료 처리
-            reservationProcess.reservationFinish(reservationDto);
-
-            // 성공 응답 반환
-            return Map.of("isSuccess", true);
+    @PutMapping("/reservation/finish/{reservationNo}")
+    public String reservationFinish(@PathVariable("reservationNo") int reservationNo) {
+        reservationProcess.reservationFinish(reservationNo);
+        return "isSuccess";
     }
+
+    // 예약 취소 상태 수정
+    @PutMapping("/reservation/cancel/{reservationNo}")
+    public String reservationCancel(@PathVariable("reservationNo") int reservationNo) {
+        reservationProcess.reservationCancel(reservationNo);
+        return "isSuccess";
+    }
+
 }

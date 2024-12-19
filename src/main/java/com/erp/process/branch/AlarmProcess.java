@@ -5,6 +5,8 @@ import com.erp.repository.AlarmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AlarmProcess {
 
@@ -14,5 +16,9 @@ public class AlarmProcess {
     // 알림 저장
     public alarm saveAlarm(alarm alarm) {
         return alarmRepository.save(alarm);
+    }
+
+    public List<alarm> getAllAlarms() {
+        return alarmRepository.findAll();
     }
 }

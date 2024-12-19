@@ -87,7 +87,6 @@ public class ProductProcess {
 
 	        // 해당 대분류에 소분류가 존재하는지 확인
 	        if (productRepository.existsByProductBCode(productCode)) {
-	        	System.out.println("이거 탄거임?");
 	            response.put("isSuccess", false);
 	            response.put("message", "해당 대분류에 소분류 상품이 존재합니다. 삭제할 수 없습니다.");
 	            
@@ -184,32 +183,72 @@ public class ProductProcess {
 	    }
 	}
 	
-	//소분류 수정
+	// 소분류 수정
 	@Transactional
-	public String updateProduct(ProductDto productDto) {
-        if (!productRepository.existsById(productDto.getProductCode())) {
-            return "해당 번호의 데이터가 존재하지 않습니다.";
-        }
+	public Map<String, Object> updateProduct(ProductDto productDto) {
+	    Map<String, Object> response = new HashMap<>();
+	    
+	    try {
+	        // 소분류 코드가 존재하는지 확인
+	        if (!productRepository.existsById(productDto.getProductCode())) {
+	            response.put("isSuccess", false);
+	            response.put("message", "해당 번호의 데이터가 존재하지 않습니다.");
+	            return response;
+	        }
 
-        Product_B productB = productBRepository.findById(productDto.getProduct_b().getProductBCode())
-                .orElseThrow(() -> new IllegalArgumentException("해당 대분류 코드가 존재하지 않습니다."));
-    	
-		Product product = new Product(productDto.getProductCode(), productDto.getProductName(), productDto.getProductPrice(), productDto.getProductEa(), productB);
-        
-        productRepository.save(product);
-        
-        return "isSuccess";
-    }
+	        // 대분류 코드가 존재하는지 확인
+	        Product_B productB = productBRepository.findById(productDto.getProduct_b().getProductBCode()).orElse(null);
+	        if (productB == null) {
+	            response.put("isSuccess", false);
+	            response.put("message", "해당 대분류 코드가 존재하지 않습니다.");
+	            return response;
+	        }
+	        
+	        // 수정할 상품 객체 생성
+	        Product product = new Product(
+	            productDto.getProductCode(),
+	            productDto.getProductName(),
+	            productDto.getProductPrice(),
+	            productDto.getProductEa(),
+	            productB
+	        );
+	        
+	        // 상품 저장
+	        productRepository.save(product);
+	        
+	        response.put("isSuccess", true);
+	        response.put("message", "소분류 수정 성공!");
+	    } catch (Exception e) {
+	        response.put("isSuccess", false);
+	        response.put("message", "수정 중 오류 발생: " + e.getMessage());
+	    }
+	    
+	    return response;
+	}
 	
-	//소분류 삭제(번호가 없으면 오류)
+	// 소분류 삭제
 	@Transactional
-	public String deleteProduct(String productCode) {
-		if (!productRepository.existsById(productCode)) {
-            return "해당 번호의 데이터가 존재하지 않습니다.";
-        }
+	public Map<String, Object> deleteProduct(String productCode) {
+	    Map<String, Object> response = new HashMap<>();
+	    
+	    try {
+	        // 소분류 코드가 존재하는지 확인
+	        if (!productRepository.existsById(productCode)) {
+	            response.put("isSuccess", false);
+	            response.put("message", "해당 번호의 데이터가 존재하지 않습니다.");
+	            return response;
+	        }
 
-		productRepository.deleteById(productCode);
-        
-        return "isSuccess";
+	        // 소분류 삭제
+	        productRepository.deleteById(productCode);
+	        
+	        response.put("isSuccess", true);
+	        response.put("message", "소분류 삭제 성공!");
+	    } catch (Exception e) {
+	        response.put("isSuccess", false);
+	        response.put("message", "삭제 중 오류 발생: " + e.getMessage());
+	    }
+	    
+	    return response;
 	}
 }

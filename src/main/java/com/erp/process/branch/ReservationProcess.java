@@ -39,27 +39,36 @@ public class ReservationProcess {
 
 	//예약 리스트 조회 (0:현황 , 1:완료, 2:취소)
 	//예약 현황 리스트 조회 ( reservation_status = 0)
-	public List<ReservationDto> getReservationsWithStatusZero() {
-		List<Reservation> reservations = reservationRepository.findReservationsWithStatusZero();
-		return reservations.stream()
-				.map(ReservationDto::fromEntity)
-				.collect(Collectors.toList());
+//	public List<ReservationDto> getReservationsWithStatusZero() {
+//		List<Reservation> reservations = reservationRepository.findReservationsWithStatusZero();
+//		return reservations.stream()
+//				.map(ReservationDto::fromEntity)
+//				.collect(Collectors.toList());
+//	}
+	public List<Reservation> getReservationsWithStatusZero() {
+		return reservationRepository.findReservationsWithStatusZero();
 	}
 
 	//예약 완료 리스트 조회 ( reservation_status = 1)
-	public List<ReservationDto> getReservationsWithStatusOne() {
-		List<Reservation> reservations = reservationRepository.findReservationsWithStatusNoOne();
-		return reservations.stream()
-				.map(ReservationDto::fromEntity)
-				.collect(Collectors.toList());
+//	public List<ReservationDto> getReservationsWithStatusOne() {
+//		List<Reservation> reservations = reservationRepository.findReservationsWithStatusNoOne();
+//		return reservations.stream()
+//				.map(ReservationDto::fromEntity)
+//				.collect(Collectors.toList());
+//	}
+	public List<Reservation> getReservationsWithStatusOne() {
+		return reservationRepository.findReservationsWithStatusNoOne();
 	}
 
 	//예약 취소 리스트 조회 ( reservation_status = 2)
-	public List<ReservationDto> getReservationsWithStatusTwo() {
-		List<Reservation> reservations = reservationRepository.findReservationsWithStatusTwo();
-		return reservations.stream()
-				.map(ReservationDto::fromEntity)
-				.collect(Collectors.toList());
+//	public List<ReservationDto> getReservationsWithStatusTwo() {
+//		List<Reservation> reservations = reservationRepository.findReservationsWithStatusTwo();
+//		return reservations.stream()
+//				.map(ReservationDto::fromEntity)
+//				.collect(Collectors.toList());
+//	}
+	public List<Reservation> getReservationsWithStatusTwo() {
+		return reservationRepository.findReservationsWithStatusTwo();
 	}
 
 	
@@ -278,20 +287,56 @@ public class ReservationProcess {
 
 	//예약 완료(확정) 상태 변경
 	@Transactional
-	public String reservationFinish(ReservationDto reservationDto) {
+	public String reservationFinish(int reservationNo) {
 		try {
-			// 예약 번호 가져오기
-			int reservationNo = reservationDto.getReservationNo();
+			//reservationNo으로 Id 조회
+			int customerId = reservationRepository.findCustomerIdByReservationNo(reservationNo);
+			String serviceCode = reservationRepository.findServiceCodeByReservationNo(reservationNo);
+			String memberId = reservationRepository.findMemberIdByReservationNo(reservationNo);
 
-			// 현재 예약 상태 조회
-			reservationRepository.findReservationStatusByReservationNo(reservationNo);
+			// 서비스 이용 횟수 증가
+        	reservationRepository.incrementServiceCount(serviceCode);
 
-			// 예약 상태 업데이트 (1: 완료 상태로 변경)
-			reservationRepository.updateReservationStatus(reservationNo);
+        	// 멤버 이용 횟수 증가
+        	reservationRepository.incrementMemberCount(memberId);
 
-			return "isSuccess";
+        	// 서비스 가격 조회
+        	int servicePrice = reservationRepository.findServicePriceByCode(serviceCode);
+
+        	// 고객 총 결제 금액 증가
+        	reservationRepository.incrementCustomerTotal(customerId, servicePrice);
+
+			// 현재 상태 조회
+			int reservationStatus = reservationRepository.findReservationStatusByReservationNo(reservationNo);
+
+			// 상태가 0인 경우에만 1로 업데이트
+			if (reservationStatus == 0) {
+				reservationRepository.updateReservationStatusZero(reservationNo);
+				return "isSuccess";
+			} else {
+				return "이미 확정된 예약입니다.";
+			}
 		} catch (Exception e) {
 			return "예약 완료(확정) 작업 오류: " + e.getMessage();
+		}
+	}
+
+	//예약 취소 상태 변경
+	@Transactional
+	public String reservationCancel(int reservationNo) {
+		try {
+			// 현재 상태 조회
+			int reservationStatus = reservationRepository.findReservationStatusByReservationNo(reservationNo);
+
+			// 상태가 0인 경우에만 2로 업데이트
+			if (reservationStatus == 0) {
+				reservationRepository.updateReservationStatusTwo(reservationNo);
+				return "isSuccess";
+			} else {
+				return "이미 확정된 예약입니다.";
+			}
+		} catch (Exception e) {
+			return "예약 취소 작업 오류: " + e.getMessage();
 		}
 	}
 
