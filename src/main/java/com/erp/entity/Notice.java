@@ -39,6 +39,9 @@ public class Notice {
 	@Column(name = "notice_check", nullable = false, columnDefinition = "tinyint(1) default 0")
 	private boolean noticeCheck; // 공지 중요여부
 	
+	@Column(name = "notice_imagepath", nullable = true, length = 255)
+    private String noticeImagePath; //공지에 포함된 이미지 파일의 경로
+	
 	@PrePersist // persist되기 전에 자동호출되어 당일 날짜정보 저장
 	protected void onCreate() {
 		noticeReg = LocalDate.now();
@@ -51,7 +54,8 @@ public class Notice {
 			.noticeTitle(noticeTitle)
 			.noticeContent(noticeContent)
 			.noticeReg(noticeReg)
-			.noticeCheck(noticeCheck).build();
+			.noticeCheck(noticeCheck)
+			.noticeImagePath(noticeImagePath).build();
 	}
 	
 	// Dto -> Entity
@@ -61,6 +65,7 @@ public class Notice {
 			.noticeTitle(dto.getNoticeTitle())
 			.noticeContent(dto.getNoticeContent())
 			.noticeReg(dto.getNoticeReg())
-			.noticeCheck(dto.isNoticeCheck()).build();
+			.noticeCheck(dto.isNoticeCheck())
+			.noticeImagePath(dto.getNoticeImagePath()).build();
 	}
 }
