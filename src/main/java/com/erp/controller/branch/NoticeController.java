@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.erp.dto.NoticeDto;
 import com.erp.process.branch.NoticeProcess;
@@ -58,9 +60,10 @@ public class NoticeController {
 	
 	// 공지 작성
 	@PostMapping
-	public Map<String, Object> insertData(@RequestBody NoticeDto dto) {
+	public Map<String, Object> insertData(@RequestPart("dto") NoticeDto dto, // JSON 데이터
+	        							  @RequestPart(value = "image", required = false) MultipartFile image) { // 이미지 파일) {
 		// 공지사항 등록
-		Map<String, Object> response = noticeProcess.insert(dto);
+		Map<String, Object> response = noticeProcess.insert(dto, image);
 
 //		// 공지사항 번호 가져옴
 //		Integer noticeNo = (Integer) response.get("noticeNo");  // Object 타입을 Integer로 캐스팅

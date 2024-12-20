@@ -1,5 +1,10 @@
 package com.erp.process.branch;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,12 +13,14 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.erp.dto.NoticeDto;
 import com.erp.dto.NoticeNoOnly;
@@ -24,6 +31,9 @@ import com.erp.repository.NoticeRepository;
 public class NoticeProcess {
 	@Autowired
 	private NoticeRepository noticeRepository;
+	
+	@Value("${file.upload-dir}")
+	private String uploadDir;
 	
 	// 상단에 고정할 중요 공지 구분하여 페이징처리
 	public Page<NoticeDto> selectAll(Pageable pageable){
@@ -83,6 +93,7 @@ public class NoticeProcess {
 	        .noticeNo(currentNotice.getNoticeNo())
 	        .noticeTitle(currentNotice.getNoticeTitle())
 	        .noticeContent(currentNotice.getNoticeContent())
+	        .noticeImagePath(currentNotice.getNoticeImagePath())
 	        .noticeReg(currentNotice.getNoticeReg())
 	        .prevNo(prevNotice != null ? prevNotice.getNoticeNo() : null)
 	        .nextNo(nextNotice != null ? nextNotice.getNoticeNo() : null)
@@ -103,34 +114,57 @@ public class NoticeProcess {
 			.stream().map(Notice::toDto).collect(Collectors.toList());
 	}
 	
-	// 공지 등록
-	public Map<String, Object> insert(NoticeDto dto) {
-	    Map<String, Object> response = new HashMap<>();
+	// 파일 업로드 처리 메서드 추가
+	private String uploadFile(MultipartFile file) throws IOException {
+	    if (file == null || file.isEmpty()) {
+	        return null; // 파일이 없으면 null 반환
+	    }
 
+	    // 고유 파일명 생성
+	    String imageName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+
+	    // 절대 경로로 디렉토리 설정
+	    Path uploadPath = Paths.get(uploadDir).toAbsolutePath(); // uploadDir은 application.properties에서 정의됨
+
+	    // 디렉토리가 없으면 생성
+	    if (Files.notExists(uploadPath)) {
+	        System.out.println("Creating upload directory: " + uploadPath); // 디버깅 로그 추가
+	        Files.createDirectories(uploadPath);
+	    }
+
+	    // 저장 경로 생성
+	    Path filePath = uploadPath.resolve(imageName);
+
+	    // 파일 저장
 	    try {
-	        // 중요 공지일 경우만 제한 조건 검사를 수행
-	        if (dto.isNoticeCheck()) {
-	            long count = noticeRepository.countNoticesWithNoticeCheck();
+	        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+	        System.out.println("File saved to: " + filePath); // 디버깅 로그 추가
+	    } catch (IOException e) {
+	        System.err.println("Error saving file: " + e.getMessage()); // 디버깅 로그 추가
+	        throw e;
+	    }
 
-	            // 중요 공지가 5개를 초과할 수 없도록 제한
-	            if (count >= 5) {
-	                response.put("isSuccess", false);
-	                response.put("message", "중요 공지는 5개를 넘을 수 없습니다.");
-	                return response;
-	            }
+	    // 반환 경로 (URL에서 접근 가능하도록 /uploads/로 반환)
+	    return "/uploads/" + imageName;
+	}
+	
+	// 공지 등록
+	public Map<String, Object> insert(NoticeDto dto, MultipartFile image) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        // 중요 공지 제한 검사
+	        if (dto.isNoticeCheck() && noticeRepository.countNoticesWithNoticeCheck() >= 5) {
+	            response.put("isSuccess", false);
+	            response.put("message", "중요 공지는 5개를 넘을 수 없습니다.");
+	            return response;
 	        }
 
-	        // 가장 큰 공지 번호 조회
-	        Integer maxNoticeNo = noticeRepository.findMaxNoticeNo();
-	        if (maxNoticeNo == null) {
-	            maxNoticeNo = 0; // 공지가 없을 경우 0으로 초기화
-	        }
-
-	        // 새 공지 생성
+	        // 새 공지 생성 및 이미지 업로드 처리
 	        Notice newData = Notice.of(dto);
-
-	        // 다음 공지 번호 수동 설정
-	        newData.setNoticeNo(maxNoticeNo + 1);
+	        newData.setNoticeNo(noticeRepository.findMaxNoticeNo() != null
+	                ? noticeRepository.findMaxNoticeNo() + 1 : 1);
+	        newData.setNoticeImagePath(uploadFile(image)); // 업로드된 이미지 경로 설정
+	        System.out.println("Uploaded Image Path: " + newData.getNoticeImagePath());
 
 	        // 공지 저장
 	        noticeRepository.save(newData);
