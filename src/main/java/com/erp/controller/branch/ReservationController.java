@@ -127,17 +127,35 @@ public class ReservationController {
 
 
     // 예약 완료(확정) 상태 수정
+//    @PutMapping("/reservation/finish/{reservationNo}")
+//    public String reservationFinish(@PathVariable("reservationNo") int reservationNo) {
+//        reservationProcess.reservationFinish(reservationNo);
+//        return "isSuccess";
+//    }
     @PutMapping("/reservation/finish/{reservationNo}")
-    public String reservationFinish(@PathVariable("reservationNo") int reservationNo) {
+    public Map<String, Boolean> reservationFinish(@PathVariable("reservationNo") int reservationNo) {
         reservationProcess.reservationFinish(reservationNo);
-        return "isSuccess";
+
+        // JSON 객체 형태로 반환
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isSuccess", true);
+        return response;
     }
 
     // 예약 취소 상태 수정
+//    @PutMapping("/reservation/cancel/{reservationNo}")
+//    public String reservationCancel(@PathVariable("reservationNo") int reservationNo) {
+//        reservationProcess.reservationCancel(reservationNo);
+//        return "isSuccess";
+//    }
     @PutMapping("/reservation/cancel/{reservationNo}")
-    public String reservationCancel(@PathVariable("reservationNo") int reservationNo) {
+    public Map<String, Boolean> reservationCancel(@PathVariable("reservationNo") int reservationNo) {
         reservationProcess.reservationCancel(reservationNo);
-        return "isSuccess";
+
+        // JSON 객체 형태로 반환
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isSuccess", true);
+        return response;
     }
 
 }
