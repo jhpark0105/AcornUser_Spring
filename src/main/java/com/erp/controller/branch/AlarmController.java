@@ -1,12 +1,10 @@
 package com.erp.controller.branch;
 
-import com.erp.entity.alarm;
+import com.erp.entity.Alarm;
 import com.erp.process.branch.AlarmProcess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,18 +14,31 @@ public class AlarmController {
     @Autowired
     private AlarmProcess alarmProcess;
 
+    // 모든 알림 조회
     @GetMapping
-    public ResponseEntity<List<alarm>> getNotifications() {
-        // AlarmProcess를 사용하여 DB에서 알림 데이터를 가져옴
-        List<alarm> notifications = alarmProcess.getAllAlarms();
-
-        // 알림 데이터를 ResponseEntity로 반환
+    public ResponseEntity<List<Alarm>> getAllNotifications() {
+        List<Alarm> notifications = alarmProcess.getAllAlarms();
         return ResponseEntity.ok(notifications);
     }
-//    @GetMapping
-//    public ResponseEntity<?> getNotifications() {
-//        // 알림 데이터를 반환하는 로직 구현
-//        // 가령, DB에서 데이터를 가져오거나 임시 데이터를 반환
-//        return ResponseEntity.ok(List.of("Notification 1", "Notification 2"));
-//    }
+
+    // 읽지 않은 알림 조회
+    @GetMapping("/unread")
+    public ResponseEntity<List<Alarm>> getUnreadNotifications() {
+        List<Alarm> unreadNotifications = alarmProcess.getUnreadAlarms();
+        return ResponseEntity.ok(unreadNotifications);
+    }
+
+    // 특정 알림 읽음 처리
+    @PostMapping("/{alarmId}/read")
+    public ResponseEntity<Void> markNotificationAsRead(@PathVariable Long alarmId) {
+        alarmProcess.markAlarmAsRead(alarmId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 모든 알림 읽음 처리
+    @PostMapping("/read")
+    public ResponseEntity<Void> markAllNotificationsAsRead() {
+        alarmProcess.markAllAlarmsAsRead();
+        return ResponseEntity.ok().build();
+    }
 }

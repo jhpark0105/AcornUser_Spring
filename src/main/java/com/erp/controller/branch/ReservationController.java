@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.erp.entity.Alarm;
 import com.erp.entity.Reservation;
-import com.erp.entity.alarm;
 import com.erp.process.branch.AlarmProcess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -94,7 +94,7 @@ public class ReservationController {
         String alarmContent = customerName + "님의 예약이 등록되었습니다!";
 
         // 알림 생성 및 DB 저장
-        alarm alarm = com.erp.entity.alarm.builder()
+        Alarm alarm = com.erp.entity.Alarm.builder()
                 .content(alarmContent)
                 .build();
 

@@ -2,8 +2,6 @@ package com.erp.controller.branch;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import com.erp.entity.alarm;
 import com.erp.process.branch.AlarmProcess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
