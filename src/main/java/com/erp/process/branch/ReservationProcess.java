@@ -37,8 +37,8 @@ public class ReservationProcess {
 		return reservationRepository.findAll();
 	}
 
-	//예약 리스트 조회 (0:현황 , 1:완료, 2:취소)
-	//예약 현황 리스트 조회 ( reservation_status = 0)
+	//예약 리스트 조회 (0:대기 , 1:완료, 2:취소)
+	//예약 대기 리스트 조회 ( reservation_status = 0)
 //	public List<ReservationDto> getReservationsWithStatusZero() {
 //		List<Reservation> reservations = reservationRepository.findReservationsWithStatusZero();
 //		return reservations.stream()

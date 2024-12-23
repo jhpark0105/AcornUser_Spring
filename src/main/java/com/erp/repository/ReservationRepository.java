@@ -10,8 +10,8 @@ import org.springframework.data.repository.query.Param;
 import com.erp.entity.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
-	//예약 리스트 조회 (0:현황 , 1:완료, 2:취소)
-    //예약 현황 리스트 조회 ( reservation_status = 0)
+	//예약 리스트 조회 (0:대기 , 1:완료, 2:취소)
+    //예약 대기 리스트 조회 ( reservation_status = 0)
     @Query("SELECT r FROM Reservation r JOIN FETCH r.customer c JOIN FETCH r.service s " +
             "JOIN FETCH r.member m WHERE r.reservationStatus = 0")
     List<Reservation> findReservationsWithStatusZero();
