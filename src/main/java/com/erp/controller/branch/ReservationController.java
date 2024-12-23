@@ -53,7 +53,7 @@ public class ReservationController {
         return reservationProcess.getData();
     }
 
-    //예약 현황 리스트 조회
+    //예약 대기 리스트 조회
     @GetMapping("/reservation/confirm")
 //    public List<ReservationDto> getConfirmList() {
 //        return reservationProcess.getReservationsWithStatusZero();
