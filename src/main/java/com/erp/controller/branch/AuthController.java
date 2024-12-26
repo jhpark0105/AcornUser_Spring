@@ -30,7 +30,7 @@ public class AuthController {
 	public ResponseEntity<? super SignUpResponseDto> signup(@RequestBody @Valid SignUpRequestDto requestBody) {
 		// 어드민 역할이 없거나 비어있다면 기본값 설정
 		if (requestBody.getAdminRole() == null || requestBody.getAdminRole().isBlank()) {
-			requestBody.setAdminRole("ROLE_ADMIN"); // 기본값 설정
+			requestBody.setAdminRole("ROLE_BRANCH"); // 기본값 설정
 	    }
 		
 		// 회원가입 처리 및 응답 반환
@@ -63,7 +63,7 @@ public class AuthController {
 	@PostMapping("/main/login")
 	public ResponseEntity<? super LoginRepsonseDto> branchLogin(@RequestBody @Valid LoginRequestDto requestBody) {
 		// 로그인 처리 및 응답 반환
-		ResponseEntity<? super LoginRepsonseDto> response = authProcess.branchLogin(requestBody);
+		ResponseEntity<? super LoginRepsonseDto> response = authProcess.login(requestBody);
 		return response;
 	}
 	

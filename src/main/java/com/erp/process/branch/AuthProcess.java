@@ -16,5 +16,5 @@ public interface AuthProcess {
 	
 	ResponseEntity<? super SignUpResponseDto> branchSignUp(BranchSignUpRequestDto dto);
 	
-	ResponseEntity<? super LoginRepsonseDto> branchLogin(LoginRequestDto dto);
+//	ResponseEntity<? super LoginRepsonseDto> branchLogin(LoginRequestDto dto);
 }

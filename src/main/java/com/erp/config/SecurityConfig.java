@@ -37,7 +37,7 @@ public class SecurityConfig {
 			.httpBasic().disable() // HTTP Basic 인증 비활성화
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests() // 각각의 요청에 대한 권한 설정 시작
-			.requestMatchers("/", "/login", "/signup", "/admin/signup", "/logoutProcess", "/main/**", "/main/signup", "/dashboard/**", "/main/dashboard/**").permitAll()
+			.requestMatchers("/", "/login","/admin/login", "/signup", "/admin/signup", "/logoutProcess", "/main/**", "/main/signup", "/dashboard/**", "/main/dashboard/**").permitAll()
 			.requestMatchers("/main/dashboard/**").permitAll()
 			.anyRequest().permitAll().and() // 모든 요청을 허용 (개발 편의상 설정해놓음)
 			.exceptionHandling().authenticationEntryPoint(new FailedAuthenticationEntryPoint()); // 인증 실패 시 처리 로직 설정
