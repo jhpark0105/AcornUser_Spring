@@ -35,6 +35,9 @@ public class Product {
 
     @Column(name = "product_ea")
     private int productEa;       // 소분류 수량
+    
+    @Column(name = "product_imagepath")
+    private String productImagePath; //소분류 상품 사진
 
     //ManyToOne 관계로 대분류를 참조
     @ManyToOne(fetch = FetchType.EAGER)
