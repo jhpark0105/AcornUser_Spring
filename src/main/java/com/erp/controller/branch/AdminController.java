@@ -2,14 +2,12 @@ package com.erp.controller.branch;
 
 import java.util.List;
 
+import com.erp.dto.ManagerDto;
+import com.erp.entity.Manager;
+import com.erp.provider.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.erp.dto.AdminDto;
 import com.erp.entity.Admin;
@@ -19,6 +17,20 @@ import com.erp.process.branch.AdminProcess;
 public class AdminController {
 	@Autowired
 	private AdminProcess adminProcess;
+
+	@Autowired
+	private JwtProvider jwtProvider;
+
+	// 쿠키에서 adminId 추출하여 admin 조회
+	@GetMapping("/admin/mypage")
+	public AdminDto getAdminByToken(@CookieValue(name = "accessToken") String token) {
+		// 토큰에서 adminId(id) 추출
+		String adminId = jwtProvider.validate(token);
+
+		// 추출한 adminId로 admin 조회
+		Admin admin = adminProcess.selectOne(adminId);
+		return AdminDto.toDto(admin);
+	}
 	
 	// SELECT (회원 조회)
 	@GetMapping("/admin")
