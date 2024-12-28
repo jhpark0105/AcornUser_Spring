@@ -19,6 +19,7 @@ public class ProductDto {
     private String productName; //상품 이름
     private int productPrice; //상품 가격
     private int productEa; //상품 수량
+    private String productImagePath; //상품 사진
     private Product_B product_b; //대분류
     private String productBCode; //대분류 코드
     private String productBName; //대분류 이름
@@ -31,6 +32,7 @@ public class ProductDto {
             .productName(product.getProductName())
             .productPrice(product.getProductPrice())
             .productEa(product.getProductEa())
+            .productImagePath(product.getProductImagePath())
             .productBCode(product.getProduct_b() != null ? product.getProduct_b().getProductBCode() : null)
             .productBName(product.getProduct_b() != null ? product.getProduct_b().getProductBName() : null)
             .build();
