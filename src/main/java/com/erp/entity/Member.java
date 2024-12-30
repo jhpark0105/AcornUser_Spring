@@ -32,6 +32,9 @@ public class Member {
 	
 	@Column(name="member_name")
 	private String memberName;
+
+	@Column(name = "member_password")
+	private String memberPassword;
 	
 	@Column(name="member_job")
 	private String memberJob;
@@ -52,6 +55,7 @@ public class Member {
 		return Member.builder()
 				.memberId(dto.getMemberId())
 				.memberName(dto.getMemberName())
+				.memberPassword(dto.getMemberPassword())
 				.memberJob(dto.getMemberJob())
 				.memberDate(dto.getMemberDate())
 				.memberTel(dto.getMemberTel())

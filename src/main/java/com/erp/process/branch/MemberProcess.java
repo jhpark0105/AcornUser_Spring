@@ -64,6 +64,7 @@ public class MemberProcess {
 		try {
 			Member member = new Member(dto.getMemberId(),
 					dto.getMemberName(),
+					dto.getMemberPassword(),
 					dto.getMemberJob(),
 					dto.getMemberDate(),
 					dto.getMemberTel(),

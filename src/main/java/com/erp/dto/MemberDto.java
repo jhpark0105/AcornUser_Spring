@@ -16,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberDto {
-	private String memberId, memberName, memberJob, memberTel, branchCode;
+	private String memberId, memberName, memberPassword, memberJob, memberTel, branchCode;
 	private LocalDate memberDate;
 	private int memberCnt;
 
@@ -24,6 +24,7 @@ public class MemberDto {
 		return MemberDto.builder()
 				.memberId(member.getMemberId())
 				.memberName(member.getMemberName())
+				.memberPassword(member.getMemberPassword())
 				.memberJob(member.getMemberJob())
 				.memberDate(member.getMemberDate())
 				.memberTel(member.getMemberTel())

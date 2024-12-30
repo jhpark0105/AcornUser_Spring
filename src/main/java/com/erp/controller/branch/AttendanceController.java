@@ -49,7 +49,7 @@ public class AttendanceController {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("직원을 찾을 수 없습니다."));
 
-        if (!member.getMemberName().equals(password)) {
+        if (!member.getMemberPassword().equals(password)) {
             return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
         }
 
