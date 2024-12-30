@@ -40,7 +40,12 @@ public class AdminProcess {
 		if (admin == null) {
 	        throw new IllegalArgumentException("어드민 계정이 없습니다.");
 		}
-	        admin.setAdminPw(bCryptPasswordEncoder.encode(dto.getAdminPw()));
+		// 기존 비밀번호 유지 또는 새로 입력된 비밀번호 설정
+		if (dto.getAdminPw() == null || dto.getAdminPw().isEmpty()) {
+			dto.setAdminPw(admin.getAdminPw());
+		} else if (!dto.getAdminPw().equals(admin.getAdminPw())) {
+			dto.setAdminPw(bCryptPasswordEncoder.encode(dto.getAdminPw()));
+		}
 	        admin.setAdminName(dto.getAdminName());
 	        admin.setAdminBirth(dto.getAdminBirth());
 	        admin.setAdminPhone(dto.getAdminPhone());

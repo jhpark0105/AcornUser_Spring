@@ -7,6 +7,7 @@ import com.erp.entity.Manager;
 import com.erp.provider.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.erp.dto.AdminDto;
@@ -20,6 +21,9 @@ public class AdminController {
 
 	@Autowired
 	private JwtProvider jwtProvider;
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	// 쿠키에서 adminId 추출하여 admin 조회
 	@GetMapping("/admin/mypage")
@@ -52,16 +56,30 @@ public class AdminController {
 	
 	// UPDATE (회원 수정)
 	@PutMapping("/admin/{adminId}")
-	public ResponseEntity<String> update(@PathVariable("adminId")String adminId, @RequestBody AdminDto dto) {
+	public ResponseEntity<String> update(@PathVariable("adminId") String adminId, @RequestBody AdminDto dto) {
 		Admin admin = adminProcess.selectOne(adminId);
-		if(admin == null) {
+
+		if (admin == null) {
 			return ResponseEntity.notFound().build();
 		}
-		dto.setAdminId(adminId);
+
+		// 기존 비밀번호 유지: 비밀번호가 null이거나 비어 있으면 기존 값 사용
+		if (dto.getAdminPw() == null || dto.getAdminPw().isEmpty()) {
+			dto.setAdminPw(admin.getAdminPw());
+		} else if (dto.getAdminPw().startsWith("$2a$")) {
+			// 클라이언트가 암호화된 비밀번호를 보낸 경우
+			dto.setAdminPw(admin.getAdminPw());
+		} else {
+			// 평문 비밀번호가 전송된 경우에만 해싱
+			String hashedPassword = passwordEncoder.encode(dto.getAdminPw());
+			dto.setAdminPw(hashedPassword);
+		}
+		// 사용자 정보 업데이트
 		adminProcess.update(adminId, dto);
 		return ResponseEntity.ok("success");
 	}
-	
+
+
 	// DELETE (회원 삭제)
 	@DeleteMapping("/admin/{adminId}")
 	public ResponseEntity<String> delete(@PathVariable("adminId")String adminId) {
