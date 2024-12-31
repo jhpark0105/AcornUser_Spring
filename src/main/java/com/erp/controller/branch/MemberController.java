@@ -21,6 +21,7 @@ import com.erp.dto.MemberDto;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000") // React 서버 주소
 public class MemberController {
+	// 제발 성공해줘 
 	@Autowired
 	private MemberProcess dao;
 	
