@@ -23,8 +23,14 @@ public class AttendanceController {
 
     // 전체 근태 목록 조회
     @GetMapping("/all")
-    public ResponseEntity<List<AttendanceDto>> getAllAttendance() {
-        return ResponseEntity.ok(attendanceProcess.getAllList());
+    public ResponseEntity<?> getAllAttendance() {
+        try {
+            List<AttendanceDto> attendanceList = attendanceProcess.getAllList();
+            return ResponseEntity.ok(attendanceList);
+        } catch (Exception e) {
+            e.printStackTrace(); // 서버 로그에 예외 출력
+            return ResponseEntity.status(500).body("데이터 조회 중 오류 발생 : "+ e.getMessage());
+        }
     }
 
     // 특정 날짜 근태 조회
@@ -73,7 +79,12 @@ public class AttendanceController {
     // 근태 수정
     @PutMapping("/update")
     public ResponseEntity<String> updateAttendance(@RequestBody AttendanceDto attendanceDto) {
-        return ResponseEntity.ok(attendanceProcess.update(attendanceDto));
+        try {
+            String result = attendanceProcess.update(attendanceDto);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("수정 작업 오류: " + e.getMessage());
+        }
     }
 
     // 근태 삭제

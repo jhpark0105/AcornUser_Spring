@@ -3,6 +3,7 @@ package com.erp.process.branch;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +30,17 @@ public class AttendanceProcess {
 
     // 전체 근태 목록 조회
     public List<AttendanceDto> getAllList() {
-        return repository.findAll()
-                .stream()
-                .map(AttendanceDto::fromEntity)
-                .collect(Collectors.toList());
+        try {
+            List<Attendance> attendanceList = repository.findAll();
+            if (attendanceList == null || attendanceList.isEmpty()) {
+                return Collections.emptyList(); // 데이터가 없으면 빈 리스트 반환
+            }
+            return attendanceList.stream()
+                    .map(AttendanceDto::fromEntity)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException("근태 데이터를 가져오는 중 오류 발생: " + e.getMessage());
+        }
     }
 
     // 근태 기록 추가
@@ -106,14 +114,25 @@ public class AttendanceProcess {
     @Transactional
     public String update(AttendanceDto dto) {
         try {
+            // 기존 데이터 조회
+            Attendance existingAttendance = repository.findById(dto.getAttendanceId())
+                    .orElseThrow(() -> new RuntimeException("근태 기록을 찾을 수 없습니다."));
+
             Member member = memberRepository.findById(dto.getMemberId())
                     .orElseThrow(() -> new RuntimeException("해당 직원 정보를 찾을 수 없습니다."));
 
-            Attendance attendance = Attendance.fromDto(dto, member); // Member 객체 주입
-            repository.save(attendance);
+            // 필드 업데이트
+            existingAttendance.setCheckIn(dto.getCheckIn());
+            existingAttendance.setCheckOut(dto.getCheckOut());
+            existingAttendance.setAttendanceDate(dto.getAttendanceDate());
+            existingAttendance.setAttendanceStatus(dto.getAttendanceStatus());
+            existingAttendance.setMember(member); // 수정 시 Member도 매핑
+
+            // 저장
+            repository.save(existingAttendance);
             return "Success";
         } catch (Exception e) {
-            return "수정 작업 오류입니다: " + e.getMessage();
+            throw new RuntimeException("근태 수정 중 오류 발생: " + e.getMessage());
         }
     }
 

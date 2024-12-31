@@ -18,7 +18,7 @@ public class AttendanceDto {
     private LocalDate attendanceDate;
     private LocalTime checkIn, checkOut;
     private String attendanceStatus;
-    private String memberId; // Member의 ID만 포함
+    private String memberId, memberName; // Member의 ID만 포함
 
     // Entity -> DTO 변환
     public static AttendanceDto fromEntity(Attendance attendance) {
@@ -29,6 +29,7 @@ public class AttendanceDto {
                 .checkOut(attendance.getCheckOut())
                 .attendanceStatus(attendance.getAttendanceStatus())
                 .memberId(attendance.getMember().getMemberId()) // Member의 ID만 설정
+                .memberName(attendance.getMember().getMemberName())
                 .build();
     }
 }
