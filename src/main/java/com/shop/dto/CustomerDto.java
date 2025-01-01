@@ -50,6 +50,12 @@ public class CustomerDto {
 				.customerReg(this.customerReg)
 				.customerRank(this.customerRank)
 				.customerNote(this.customerNote)
+				.customerTotal(this.customerTotal)
+				.customerShopid(this.customerShopid)
+				.customerShoppw(this.customerShoppw)
+				.customerPostcode(this.customerPostcode)
+				.customerAddr1(this.customerAddr1)
+				.customerAddr2(this.customerAddr2)
 				.build();
 	}
 

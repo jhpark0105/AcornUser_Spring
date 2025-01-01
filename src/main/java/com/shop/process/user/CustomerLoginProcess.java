@@ -46,7 +46,8 @@ public class CustomerLoginProcess {
         if(dto.getCustomerShoppw() == null || dto.getCustomerShoppw().isEmpty()) {
             dto.setCustomerShoppw(customer.getCustomerShoppw());
         } else if (!dto.getCustomerShoppw().equals(customer.getCustomerShoppw())) {
-            dto.setCustomerShoppw(encoder.encode(customer.getCustomerShoppw()));
+//            dto.setCustomerShoppw(encoder.encode(customer.getCustomerShoppw()));
+            customer.setCustomerShoppw(encoder.encode(customer.getCustomerShoppw()));
         }
 
             customer.setCustomerName(dto.getCustomerName());
