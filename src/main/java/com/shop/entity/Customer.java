@@ -54,8 +54,22 @@ public class Customer {
 	
 	@Column(name = "customer_total")
 	private int customerTotal;
-	
-	private String branchCode;
+
+	@Column(name = "customer_shopid")
+	private String customerShopid;
+
+	@Column(name = "customer_shoppw")
+	private String customerShoppw;
+
+	@Column(name = "customer_postcode")
+	private String customerPostcode;
+
+	@Column(name = "customer_addr1")
+	private String customerAddr1;
+
+	@Column(name = "customer_addr2")
+	private String customerAddr2;
+
 
 	@OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
 	@JsonBackReference

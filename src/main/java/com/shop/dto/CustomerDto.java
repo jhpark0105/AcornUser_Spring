@@ -24,7 +24,7 @@ public class CustomerDto {
 	private String customerNote;
 	private int customerTotal;
 	
-	private String branchCode;
+	private String customerShopid, customerShoppw, customerPostcode, customerAddr1, customerAddr2;
 	
 	public static CustomerDto fromEntity(Customer entity) {
 		return CustomerDto.builder()
