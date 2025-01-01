@@ -100,13 +100,13 @@ public class NoticeProcess {
 				.build();
 	}
 
-	// 검색결과 페이징
-	public Page<NoticeDto> selectSearched(String keyword, Pageable pageable){
-		int pageSize = 10; // 한 페이지당 공지 수 설정
-		return noticeRepository.findByNoticeTitleContainingOrderByNoticeNoDesc(
-						keyword, PageRequest.of(pageable.getPageNumber(), pageSize))
-				.map(Notice::toDto);
-	}
+//	// 검색결과 페이징
+//	public Page<NoticeDto> selectSearched(String keyword, Pageable pageable){
+//		int pageSize = 10; // 한 페이지당 공지 수 설정
+//		return noticeRepository.findByNoticeTitleContainingOrderByNoticeNoDesc(
+//						keyword, PageRequest.of(pageable.getPageNumber(), pageSize))
+//				.map(Notice::toDto);
+//	}
 
 	// 중요 공지 목록 읽기
 	public List<NoticeDto> getCheckedNoticeList() {
@@ -114,84 +114,84 @@ public class NoticeProcess {
 				.stream().map(Notice::toDto).collect(Collectors.toList());
 	}
 
-	// 파일 업로드 처리 메서드 수정
-	private String uploadFile(MultipartFile file) throws IOException {
-		if (file == null || file.isEmpty()) {
-			return null; // 파일이 없으면 null 반환
-		}
-
-		// 고유 파일명 생성
-		String imageName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-
-		// 절대 경로로 디렉토리 설정
-		Path uploadPath = Paths.get(noticeUploadDir).toAbsolutePath(); // noticeUploadDir은 application.properties에서 정의됨
-
-		// 디렉토리가 없으면 생성
-		if (Files.notExists(uploadPath)) {
-			System.out.println("Creating upload directory: " + uploadPath); // 디버깅 로그 추가
-			Files.createDirectories(uploadPath);
-		}
-
-		// 저장 경로 생성
-		Path filePath = uploadPath.resolve(imageName);
-
-		// 파일 저장
-		try {
-			Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-			System.out.println("File saved to: " + filePath); // 디버깅 로그 추가
-		} catch (IOException e) {
-			System.err.println("Error saving file: " + e.getMessage()); // 디버깅 로그 추가
-			throw e;
-		}
-
-		// 반환 경로 (URL에서 접근 가능하도록 /uploads/notice/로 반환)
-		return "/uploads/notice/" + imageName;
-	}
-
-	// 공지 등록
-	public Map<String, Object> insert(NoticeDto dto, MultipartFile image) {
-		Map<String, Object> response = new HashMap<>();
-		try {
-			// 중요 공지 제한 검사
-			if (dto.isNoticeCheck() && noticeRepository.countNoticesWithNoticeCheck() >= 5) {
-				response.put("isSuccess", false);
-				response.put("message", "중요 공지는 5개를 넘을 수 없습니다.");
-				return response;
-			}
-
-			// 새 공지 생성 및 이미지 업로드 처리
-			Notice newData = Notice.of(dto);
-			newData.setNoticeNo(noticeRepository.findMaxNoticeNo() != null
-					? noticeRepository.findMaxNoticeNo() + 1 : 1);
-			newData.setNoticeImagePath(uploadFile(image)); // 업로드된 이미지 경로 설정
-			System.out.println("Uploaded Image Path: " + newData.getNoticeImagePath());
-
-			// 공지 저장
-			noticeRepository.save(newData);
-
-			response.put("isSuccess", true);
-			response.put("message", "공지를 작성하였습니다.");
-		} catch (Exception e) {
-			response.put("isSuccess", false);
-			response.put("message", "공지 작성 중 오류 발생: " + e.getMessage());
-		}
-		return response;
-	}
-
-	// 방금 작성한 공지번호 가져오기
-	public Map<String, Object> selectLatestNo() {
-		return Map.of("noticeNo", noticeRepository.findFirstByOrderByNoticeNoDesc().getNoticeNo());
-	}
-
-	//공지 삭제
-	@Transactional
-	public String deleteNotice(int noticeNo) {
-		if(!noticeRepository.existsById(noticeNo)) {
-			return "해당 번호의 공지가 존재하지 않습니다.";
-		}
-
-		noticeRepository.deleteById(noticeNo);
-
-		return "isSuccess";
-	}
+//	// 파일 업로드 처리 메서드 수정
+//	private String uploadFile(MultipartFile file) throws IOException {
+//		if (file == null || file.isEmpty()) {
+//			return null; // 파일이 없으면 null 반환
+//		}
+//
+//		// 고유 파일명 생성
+//		String imageName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+//
+//		// 절대 경로로 디렉토리 설정
+//		Path uploadPath = Paths.get(noticeUploadDir).toAbsolutePath(); // noticeUploadDir은 application.properties에서 정의됨
+//
+//		// 디렉토리가 없으면 생성
+//		if (Files.notExists(uploadPath)) {
+//			System.out.println("Creating upload directory: " + uploadPath); // 디버깅 로그 추가
+//			Files.createDirectories(uploadPath);
+//		}
+//
+//		// 저장 경로 생성
+//		Path filePath = uploadPath.resolve(imageName);
+//
+//		// 파일 저장
+//		try {
+//			Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+//			System.out.println("File saved to: " + filePath); // 디버깅 로그 추가
+//		} catch (IOException e) {
+//			System.err.println("Error saving file: " + e.getMessage()); // 디버깅 로그 추가
+//			throw e;
+//		}
+//
+//		// 반환 경로 (URL에서 접근 가능하도록 /uploads/notice/로 반환)
+//		return "/uploads/notice/" + imageName;
+//	}
+//
+//	// 공지 등록
+//	public Map<String, Object> insert(NoticeDto dto, MultipartFile image) {
+//		Map<String, Object> response = new HashMap<>();
+//		try {
+//			// 중요 공지 제한 검사
+//			if (dto.isNoticeCheck() && noticeRepository.countNoticesWithNoticeCheck() >= 5) {
+//				response.put("isSuccess", false);
+//				response.put("message", "중요 공지는 5개를 넘을 수 없습니다.");
+//				return response;
+//			}
+//
+//			// 새 공지 생성 및 이미지 업로드 처리
+//			Notice newData = Notice.of(dto);
+//			newData.setNoticeNo(noticeRepository.findMaxNoticeNo() != null
+//					? noticeRepository.findMaxNoticeNo() + 1 : 1);
+//			newData.setNoticeImagePath(uploadFile(image)); // 업로드된 이미지 경로 설정
+//			System.out.println("Uploaded Image Path: " + newData.getNoticeImagePath());
+//
+//			// 공지 저장
+//			noticeRepository.save(newData);
+//
+//			response.put("isSuccess", true);
+//			response.put("message", "공지를 작성하였습니다.");
+//		} catch (Exception e) {
+//			response.put("isSuccess", false);
+//			response.put("message", "공지 작성 중 오류 발생: " + e.getMessage());
+//		}
+//		return response;
+//	}
+//
+//	// 방금 작성한 공지번호 가져오기
+//	public Map<String, Object> selectLatestNo() {
+//		return Map.of("noticeNo", noticeRepository.findFirstByOrderByNoticeNoDesc().getNoticeNo());
+//	}
+//
+//	//공지 삭제
+//	@Transactional
+//	public String deleteNotice(int noticeNo) {
+//		if(!noticeRepository.existsById(noticeNo)) {
+//			return "해당 번호의 공지가 존재하지 않습니다.";
+//		}
+//
+//		noticeRepository.deleteById(noticeNo);
+//
+//		return "isSuccess";
+//	}
 }

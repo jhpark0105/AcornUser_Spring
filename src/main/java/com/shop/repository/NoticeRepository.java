@@ -15,8 +15,8 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer>{
 	List<Notice> findByNoticeCheckOrderByNoticeNoDesc(boolean noticeNo);
 	Page<Notice> findByNoticeCheckOrderByNoticeNoDesc(boolean noticeNo, Pageable pageable);
 	
-	// 공지제목에 따른 검색결과 페이징처리
-	Page<Notice> findByNoticeTitleContainingOrderByNoticeNoDesc(String keyword, Pageable pageable);
+//	// 공지제목에 따른 검색결과 페이징처리
+//	Page<Notice> findByNoticeTitleContainingOrderByNoticeNoDesc(String keyword, Pageable pageable);
 
 	/* Dashboard 공지사항 목록 출력용 */
 	@Query("SELECT n FROM Notice n WHERE n.noticeCheck=true ORDER BY n.noticeReg desc")
@@ -26,14 +26,14 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer>{
 	NoticeNoOnly findFirstByNoticeNoLessThanOrderByNoticeNoDesc(int currentNo);
 	NoticeNoOnly findFirstByNoticeNoGreaterThanOrderByNoticeNoAsc(int currentNo);
 	
-	//중요 공지 개수가 5개 이하인지 확인
-	@Query("SELECT COUNT(n) FROM Notice n WHERE n.noticeCheck = true")
-	long countNoticesWithNoticeCheck();
-	
-	//공지 등록 시, 가장 큰 공지 번호를 가져오기
-	@Query("SELECT MAX(n.noticeNo) FROM Notice n")
-	Integer findMaxNoticeNo();
-	
-	// 공지작성 후 최근 공지번호를 가져오기 위한 메서드
-	NoticeNoOnly findFirstByOrderByNoticeNoDesc();
+//	//중요 공지 개수가 5개 이하인지 확인
+//	@Query("SELECT COUNT(n) FROM Notice n WHERE n.noticeCheck = true")
+//	long countNoticesWithNoticeCheck();
+//
+//	//공지 등록 시, 가장 큰 공지 번호를 가져오기
+//	@Query("SELECT MAX(n.noticeNo) FROM Notice n")
+//	Integer findMaxNoticeNo();
+//
+//	// 공지작성 후 최근 공지번호를 가져오기 위한 메서드
+//	NoticeNoOnly findFirstByOrderByNoticeNoDesc();
 }
