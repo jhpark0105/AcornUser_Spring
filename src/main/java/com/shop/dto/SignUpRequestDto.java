@@ -28,11 +28,11 @@ public class SignUpRequestDto {
 	@NotBlank
 	private String customerGender;
 	
-	@NotBlank
-//	@Past // 과거 날짜만 허용
-	@Pattern(regexp = "^\\d{8}$") // 숫자 8자리로 입력
-	private String customerBirth;
-	
+//	@NotBlank
+////	@Past // 과거 날짜만 허용
+//	@Pattern(regexp = "^\\d{8}$") // 숫자 8자리로 입력
+//	private String customerBirth;
+//
 	@NotBlank
 	@Email
 	// @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$") @Email 때문에 필요없을 듯, 혹시 몰라 남겨둡니다.

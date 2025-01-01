@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CustomerLoginController {
+public class CustomerController {
     @Autowired
     private CustomerLoginProcess process;
 
@@ -20,9 +20,4 @@ public class CustomerLoginController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // 쿠키에서 id 추출하여 고객 조회
-    //@GetMapping("/user/mypage")
-    //public CustomerDto getCustomerByToken(@CookieValue(name ="accessToken")String token) {
-
-    //}
 }
