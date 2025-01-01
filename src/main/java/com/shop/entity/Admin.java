@@ -81,18 +81,18 @@ public class Admin {
 	
 	// 회원가입 시 클라이언트로부터 받아온 데이터를 엔티티에 저장하는 메소드
 	// 데이터 저장 및 데이터베이스 매핑용 객체를 생성
-	public Admin(SignUpRequestDto dto) {
-		this.adminId = dto.getAdminId();
-		this.adminPw = dto.getAdminPw();
-		this.adminName = dto.getAdminName();
-		this.adminBirth = dto.getAdminBirth();
-		this.adminPhone = dto.getAdminPhone();
-		this.adminEmail = dto.getAdminEmail();
-		this.adminPostcode = dto.getAdminPostcode();
-		this.adminAddress1 = dto.getAdminAddress1();
-		this.adminAddress2 = dto.getAdminAddress2();
-		this.adminTerm1 = dto.getAdminTerm1();
-		this.adminTerm2 = dto.getAdminTerm2();
-		this.adminTerm3 = dto.getAdminTerm3();		
-	}
+//	public Admin(SignUpRequestDto dto) {
+//		this.adminId = dto.getAdminId();
+//		this.adminPw = dto.getAdminPw();
+//		this.adminName = dto.getAdminName();
+//		this.adminBirth = dto.getAdminBirth();
+//		this.adminPhone = dto.getAdminPhone();
+//		this.adminEmail = dto.getAdminEmail();
+//		this.adminPostcode = dto.getAdminPostcode();
+//		this.adminAddress1 = dto.getAdminAddress1();
+//		this.adminAddress2 = dto.getAdminAddress2();
+//		this.adminTerm1 = dto.getAdminTerm1();
+//		this.adminTerm2 = dto.getAdminTerm2();
+//		this.adminTerm3 = dto.getAdminTerm3();
+//	}
 }

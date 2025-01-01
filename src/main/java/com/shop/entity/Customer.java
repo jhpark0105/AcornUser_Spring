@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.shop.dto.CustomerDto;
+import com.shop.dto.SignUpRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -74,4 +76,36 @@ public class Customer {
 	@OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
 	@JsonBackReference
 	private List<Reservation> reservationList;
+
+	// toEntity
+	// 클라이언트로부터 받아온 데이터를 엔티티에 저장하는 메소드
+	public static Customer toEntity(CustomerDto dto) {
+		return Customer.builder()
+				.customerId(dto.getCustomerId())
+				.customerName(dto.getCustomerName())
+				.customerGender(dto.getCustomerGender())
+				.customerTel(dto.getCustomerTel())
+				.customerMail(dto.getCustomerMail())
+				.customerReg(dto.getCustomerReg())
+				.customerShopid(dto.getCustomerShopid())
+				.customerShoppw(dto.getCustomerShoppw())
+				.customerPostcode(dto.getCustomerPostcode())
+				.customerAddr1(dto.getCustomerAddr1())
+				.customerAddr2(dto.getCustomerAddr2())
+				.build();
+	}
+
+	// 회원 가입 시 클라이언트로부터 받아온 데이터를 엔티티에 저장하는 메소드
+	// 데이터 저장 및 데이터베이스 매핑용 객체를 생성
+	public Customer(SignUpRequestDto dto) {
+		this.customerShopid = dto.getCustomerShopid();
+		this.customerShoppw = dto.getCustomerShoppw();
+		this.customerName = dto.getCustomerName();
+		this.customerGender = dto.getCustomerGender();
+		this.customerMail = dto.getCustomerMail();
+		this.customerTel = dto.getCustomerTel();
+		this.customerPostcode = dto.getCustomerPostcode();
+		this.customerAddr1 = dto.getCustomerAddr1();
+		this.customerAddr2 = dto.getCustomerAddr2();
+	}
 }

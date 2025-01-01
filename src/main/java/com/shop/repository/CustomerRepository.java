@@ -10,6 +10,12 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     // 이름으로 고객 조회
     List<Customer> findByCustomerName(String customerName);
 
-    // 샵 아이디랑 비밀번호 조회
-    List<Customer> findByCustomerShopidAndCustomerShoppw();
+    // 샵 아이디 조회
+    Customer findByCustomerShopid(String customerShopid);
+
+    // 회원 가입 시 Id, email, tel 중복 검사용
+    boolean existsByCustomerShopid(String customerShopid);
+    boolean existsByCustomerMail(String customerMail);
+    boolean existsByCustomerTel(String customerTel);
+
 }

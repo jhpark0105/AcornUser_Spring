@@ -52,4 +52,18 @@ public class CustomerDto {
 				.customerNote(this.customerNote)
 				.build();
 	}
+
+	public static CustomerDto toDto(Customer customer) {
+		return CustomerDto.builder()
+				.customerShopid(customer.getCustomerShopid())
+				.customerShoppw(customer.getCustomerShoppw())
+				.customerName(customer.getCustomerName())
+
+				.customerTel(customer.getCustomerTel())
+				.customerMail(customer.getCustomerMail())
+				.customerPostcode(customer.getCustomerPostcode())
+				.customerAddr1(customer.getCustomerAddr1())
+				.customerAddr2(customer.getCustomerAddr2())
+				.build();
+	}
 }
