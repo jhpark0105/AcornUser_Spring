@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/mypage")
+@CrossOrigin(origins = "http://localhost:3000")
 public class CustomerController {
 
     @Autowired
@@ -28,8 +28,8 @@ public class CustomerController {
     // 현재 로그인한 사용자 정보 조회
     @GetMapping
     public ResponseEntity<CustomerDto> getCustomerByToken(@CookieValue(name = "accessToken") String token) {
-        String customerShopid = jwtProvider.validate(token); // 토큰 검증 및 사용자 ID 추출
-        Customer customer = customerLoginProcess.findOne(customerShopid); // 사용자 조회
+        String customerShopid = jwtProvider.validate(token);
+        Customer customer = customerLoginProcess.findOne(customerShopid);
         if (customer == null) {
             return ResponseEntity.notFound().build();
         }
@@ -58,7 +58,6 @@ public class CustomerController {
     public ResponseEntity<String> update(
             @PathVariable("customerShopid") String customerShopid,
             @RequestBody CustomerDto dto) {
-
         Customer customer = customerLoginProcess.findOne(customerShopid);
         if (customer == null) {
             return ResponseEntity.notFound().build();
@@ -66,17 +65,17 @@ public class CustomerController {
 
         // 비밀번호 처리
         if (dto.getCustomerShoppw() != null && !dto.getCustomerShoppw().isEmpty()) {
-            if (!dto.getCustomerShoppw().startsWith("$2a$")) {
-                // 비밀번호가 암호화되지 않은 경우 해싱
-                String hashedPassword = passwordEncoder.encode(dto.getCustomerShoppw());
-                dto.setCustomerShoppw(hashedPassword);
-            }
+            customer.setCustomerShoppw(passwordEncoder.encode(dto.getCustomerShoppw()));
         } else {
-            dto.setCustomerShoppw(customer.getCustomerShoppw()); // 기존 비밀번호 유지
+            customer.setCustomerShoppw(customer.getCustomerShoppw());
         }
 
         // 사용자 정보 업데이트
+        customer.setCustomerName(dto.getCustomerName());
+        customer.setCustomerTel(dto.getCustomerTel());
+        customer.setCustomerMail(dto.getCustomerMail());
         customerLoginProcess.update(customerShopid, dto);
+
         return ResponseEntity.ok("success");
     }
 

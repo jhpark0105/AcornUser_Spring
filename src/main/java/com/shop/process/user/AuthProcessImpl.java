@@ -50,7 +50,7 @@ public class AuthProcessImpl implements AuthProcess {
 
 			customer.setCustomerTel(dto.getCustomerTel());
 			customer.setCustomerMail(dto.getCustomerMail());
-			customer.setCustomerMail(dto.getCustomerMail());
+			customer.setCustomerGender(dto.getCustomerGender());
 			customer.setCustomerPostcode(dto.getCustomerPostcode());
 			customer.setCustomerAddr1(dto.getCustomerAddr1());
 			customer.setCustomerAddr2(dto.getCustomerAddr2());
