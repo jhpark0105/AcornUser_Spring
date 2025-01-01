@@ -12,42 +12,48 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class SignUpRequestDto {
-	
-	@NotBlank // null, 공백 허용 안함
-	@Pattern(regexp ="^[A-Za-z][A-Za-z0-9]{2,20}$") // 2자 이상 20자 이하, 영대소문자와 숫자만 포함
+
+	@NotBlank(message = "아이디는 필수 입력 항목입니다.")
+	@Pattern(
+			regexp = "^[A-Za-z][A-Za-z0-9]{2,20}$",
+			message = "아이디는 2자 이상 20자 이하의 영문자와 숫자로 시작해야 합니다."
+	)
 	private String customerShopid;
-	
-	@NotBlank
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])[A-Za-z\\d!@#$%^&*(),.?\":{}|<>]{8,20}$") // 최소 8자 이상 최대 20자 이하, 숫자, 특수문자, 영문자가 포함
+
+	@NotBlank(message = "비밀번호는 필수 입력 항목입니다.")
+	@Pattern(
+			regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])[A-Za-z\\d!@#$%^&*(),.?\":{}|<>]{8,20}$",
+			message = "비밀번호는 8자 이상 20자 이하로 숫자, 특수문자, 영문자를 포함해야 합니다."
+	)
 	private String customerShoppw;
-	
-	@NotBlank
-	@Pattern(regexp = "^[a-zA-Z가-힣]{2,20}$") // 2자 이상 20자 이하, 한글과 영어만 입력
+
+	@NotBlank(message = "이름은 필수 입력 항목입니다.")
+	@Pattern(
+			regexp = "^[a-zA-Z가-힣]{2,20}$",
+			message = "이름은 2자 이상 20자 이하의 한글 또는 영문자로 입력해야 합니다."
+	)
 	private String customerName;
 
-	@NotBlank
+	@NotBlank(message = "성별은 필수 입력 항목입니다.")
 	private String customerGender;
-	
-//	@NotBlank
-////	@Past // 과거 날짜만 허용
-//	@Pattern(regexp = "^\\d{8}$") // 숫자 8자리로 입력
-//	private String customerBirth;
-//
-	@NotBlank
-	@Email
-	// @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$") @Email 때문에 필요없을 듯, 혹시 몰라 남겨둡니다.
+
+	@NotBlank(message = "이메일은 필수 입력 항목입니다.")
+	@Email(message = "유효한 이메일 주소를 입력해야 합니다.")
 	private String customerMail;
-	
-	@NotBlank
-	@Pattern(regexp ="^[0-9]{11}$") // 숫자 11자리만 허용
+
+	@NotBlank(message = "전화번호는 필수 입력 항목입니다.")
+	@Pattern(
+			regexp = "^[0-9]{11}$",
+			message = "전화번호는 11자리 숫자로 입력해야 합니다."
+	)
 	private String customerTel;
-	
-	@NotBlank
+
+	@NotBlank(message = "우편번호는 필수 입력 항목입니다.")
 	private String customerPostcode;
-	
-	@NotBlank
+
+	@NotBlank(message = "주소는 필수 입력 항목입니다.")
 	private String customerAddr1;
-	
-	@NotBlank
+
+	@NotBlank(message = "상세 주소는 필수 입력 항목입니다.")
 	private String customerAddr2;
 }

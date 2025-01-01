@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -34,14 +35,18 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
-				.cors().configurationSource(corsConfigurationSource()).and() // CORS 설정 추가
-				.csrf().disable() // CSRF 비활성화
-				.httpBasic().disable() // 기본 인증 비활성화
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests()
-				.requestMatchers("/user/signup", "/user/login", "/", "/main/**").permitAll() // 회원가입과 로그인은 인증 필요 없음
-				.anyRequest().authenticated().and()
-				.exceptionHandling().authenticationEntryPoint(new FailedAuthenticationEntryPoint()); // 인증 실패 처리
+				.cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정
+				.csrf(csrf -> csrf.disable()) // CSRF 비활성화
+				.httpBasic(httpBasic -> httpBasic.disable()) // 기본 인증 비활성화
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 상태 없음
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 프리플라이트 요청 허용
+						.requestMatchers("/user/signup", "/user/login", "/", "/main/**").permitAll() // 인증 없이 허용
+						.anyRequest().authenticated() // 그 외 요청은 인증 필요
+				)
+				.exceptionHandling(ex -> ex
+						.authenticationEntryPoint(new FailedAuthenticationEntryPoint()) // 인증 실패 처리
+				);
 
 		// JWT 인증 필터 추가
 		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -52,7 +57,7 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001")); // React 클라이언트 주소
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001")); // 허용할 React 서버 주소
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
 		configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
 		configuration.setAllowCredentials(true); // 인증 정보 포함 허용
