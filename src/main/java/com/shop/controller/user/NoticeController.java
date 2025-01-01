@@ -27,8 +27,8 @@ import com.shop.process.user.NoticeProcess;
 public class NoticeController {
 	@Autowired
 	private NoticeProcess noticeProcess;
-    @Autowired
-    private AlarmProcess alarmProcess;
+    //@Autowired
+    //private AlarmProcess alarmProcess;
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 
