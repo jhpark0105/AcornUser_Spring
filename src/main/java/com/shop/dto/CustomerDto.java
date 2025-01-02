@@ -61,6 +61,7 @@ public class CustomerDto {
 
 	public static CustomerDto toDto(Customer customer) {
 		return CustomerDto.builder()
+				.customerId(customer.getCustomerId())
 				.customerShopid(customer.getCustomerShopid())
 				.customerShoppw(customer.getCustomerShoppw())
 				.customerName(customer.getCustomerName())
