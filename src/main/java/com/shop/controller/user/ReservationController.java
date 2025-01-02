@@ -4,11 +4,14 @@ import com.shop.dto.CustomerDto;
 import com.shop.dto.MemberDto;
 import com.shop.dto.ReservationDto;
 import com.shop.dto.ServiceDto;
+import com.shop.entity.Alarm;
 import com.shop.entity.Customer;
+import com.shop.process.user.AlarmProcess;
 import com.shop.process.user.CustomerLoginProcess;
 import com.shop.process.user.ReservationProcess;
 import com.shop.provider.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,6 +23,13 @@ import java.util.Map;
 public class ReservationController {
     @Autowired
     private CustomerLoginProcess customerLoginProcess;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+
+    @Autowired
+    private AlarmProcess alarmProcess;
 
     @Autowired
     private ReservationProcess reservationProcess;
@@ -65,22 +75,28 @@ public class ReservationController {
         reservationProcess.insertReservation(reservationDto);
 
         // 고객명을 가져오기
-        //String customerName = reservationDto.getCustomerName();
+        String customerName = reservationDto.getCustomerName();
+        String memberName = reservationDto.getMemberName();
+        String reservationDate = reservationDto.getReservationDate();
+        String reservationTime = reservationDto.getReservationTime();
 
-
+//        // 알림 메시지 생성
+//        String alarmContent = customerName + "님의 예약이 등록되었습니다!";
         // 알림 메시지 생성
-        //String alarmContent = customerName + "님의 예약이 등록되었습니다!";
-
+        String alarmContent = customerName + "님의 예약이 등록되었습니다!\n"
+                + "담당 디자이너: " + memberName + "\n"
+                + "예약 일시: " + reservationDate +" "+ reservationTime;
         // 알림 생성 및 DB 저장
-//        Alarm alarm = com.shop.entity.Alarm.builder()
-//                .content(alarmContent)
-//                .build();
-//
-//        alarmProcess.saveAlarm(alarm);
+        Alarm alarm = com.shop.entity.Alarm.builder()
+                .content(alarmContent)
+                .build();
+
+        alarmProcess.saveAlarm(alarm);
 
         // WebSocket으로 알림 전송
-//        messagingTemplate.convertAndSend("/topic/reservations",
-//                alarmContent);
+        messagingTemplate.convertAndSend("/topic/reservations",
+                alarmContent);
+
 
         // 응답 데이터 생성
         Map<String, Object> map = new HashMap<>();
