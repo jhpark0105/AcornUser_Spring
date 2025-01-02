@@ -4,10 +4,11 @@ import com.shop.dto.CustomerDto;
 import com.shop.dto.MemberDto;
 import com.shop.dto.ReservationDto;
 import com.shop.dto.ServiceDto;
-import com.shop.entity.Alarm;
+import com.shop.entity.Customer;
+import com.shop.process.user.CustomerLoginProcess;
 import com.shop.process.user.ReservationProcess;
+import com.shop.provider.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,7 +19,26 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000") //React 서버 주소
 public class ReservationController {
     @Autowired
+    private CustomerLoginProcess customerLoginProcess;
+
+    @Autowired
     private ReservationProcess reservationProcess;
+
+    @Autowired
+    private JwtProvider jwtProvider;
+
+    // 쿠키에서 customerShopid 추출하여 customer 조회
+    @GetMapping("/reservation/customer/username")
+    public CustomerDto getCustomerByToken(@CookieValue(name = "accessToken") String token) {
+        // 토큰에서 adminId(id) 추출
+        System.out.println("Received Token: " + token);
+        String customerShopid = jwtProvider.validate(token);
+        System.out.println("Extracted customerShopid: " + customerShopid);
+
+        // 추출한 customerShopid로 customer 조회
+        Customer customer = customerLoginProcess.findOne(customerShopid);
+        return CustomerDto.toDto(customer);
+    }
 
     // 서비스 목록 조회
     @GetMapping("/reservation/service/user")
