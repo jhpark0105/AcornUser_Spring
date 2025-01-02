@@ -5,6 +5,8 @@ import com.shop.dto.LoginRequestDto;
 import com.shop.dto.SignUpRequestDto;
 import com.shop.dto.SignUpResponseDto;
 import com.shop.process.user.AuthProcess;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -36,7 +38,22 @@ public class AuthController {
 
     // 로그아웃 요청 처리
     @PostMapping("/logoutProcess")
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        // Authorization 헤더 확인
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Authorization header is missing or invalid");
+        }
+
+        String token = authHeader.substring(7); // "Bearer " 이후의 토큰 추출
+
+        // 토큰 검증 (JWT 무효화 로직 필요 시 추가)
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.status(400).body("Invalid token");
+        }
+
+
         // 로그아웃 시 쿠키 만료
         ResponseCookie cookie = ResponseCookie.from("accessToken", "")
                 .httpOnly(true) // 클라이언트 스크립트에서 접근 불가
@@ -46,7 +63,7 @@ public class AuthController {
                 .sameSite("None") // SameSite 속성 설정
                 .build();
 
-        // 로그아웃 성골 메시지와 함께 쿠키 설정
+        // 로그아웃 성공 메시지와 함께 쿠키 설정
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body("로그아웃 성공");
