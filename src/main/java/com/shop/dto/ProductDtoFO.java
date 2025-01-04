@@ -17,7 +17,9 @@ public class ProductDtoFO {	//상품발주 모달을 위한 상품Dto
     private String productName; //상품 이름
     private int productPrice; //상품 가격
     private int productEa; //상품 수량
+    private String productImagePath; //상품 사진
     private ProductBDto productBDto;
+
     //Entity -> DTO 변환 메서드
     public static ProductDtoFO fromEntity(Product product) {
         return ProductDtoFO.builder()
@@ -25,6 +27,7 @@ public class ProductDtoFO {	//상품발주 모달을 위한 상품Dto
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())
                 .productEa(product.getProductEa())
+                .productImagePath(product.getProductImagePath())
                 .productBDto(ProductBDto.fromEntity(product.getProduct_b()))
                 .build();
     }
@@ -39,6 +42,7 @@ public class ProductDtoFO {	//상품발주 모달을 위한 상품Dto
                 .productName(dto.productName)
                 .productPrice(dto.productPrice)
                 .productEa(dto.productEa)
+                .productImagePath(dto.productImagePath)
                 .product_b(bdto.toEntity())
                 .build();
     }
