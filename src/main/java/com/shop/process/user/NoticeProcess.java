@@ -43,7 +43,7 @@ public class NoticeProcess {
 		int checkedNoticeCount = checkedNotice.size();
 
 		// 페이지 크기 설정 (고정 + 일반)
-		int pageSize = 10;
+		int pageSize = 9;
 
 		// 일반 공지 페이징 계산
 		int normalNoticesPerPage = pageSize - checkedNoticeCount;
