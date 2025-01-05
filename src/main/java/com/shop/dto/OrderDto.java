@@ -1,7 +1,7 @@
 package com.shop.dto;
 
 import java.time.LocalDate;
-import com.shop.entity.Branch;
+
 import com.shop.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ public class OrderDto {//orders_no은 자동생성이고 화면에도 노출할 
 	private LocalDate ordersApplyDate;	//발주 신청일
 	private LocalDate ordersEndDate;	//발주 마감일
 	private ProductDtoFO productDtoFO;	//상품 발주를 위한 상품 Dto
-	private BranchDto branchDto;	//참조를 위한 BranchDto
+	//private BranchDto branchDto;	//참조를 위한 BranchDto
     //Entity -> DTO 변환 메서드
 	public static OrderDto fromEntity(Order entity) {
 		return OrderDto.builder()
@@ -27,7 +27,7 @@ public class OrderDto {//orders_no은 자동생성이고 화면에도 노출할 
 				.ordersApplyDate(entity.getOrdersApplyDate())
 				.ordersEndDate(entity.getOrdersEndDate())
 				.productDtoFO(ProductDtoFO.fromEntity(entity.getProduct()))
-				.branchDto(BranchDto.fromEntity(entity.getBranch()))
+				//.branchDto(BranchDto.fromEntity(entity.getBranch()))
 				.build();
 	}
     //DTO -> Entity 변환 메서드
@@ -38,7 +38,7 @@ public class OrderDto {//orders_no은 자동생성이고 화면에도 노출할 
 				.ordersApplyDate(dto.getOrdersApplyDate())
 				.ordersEndDate(dto.getOrdersEndDate())
 				.product(ProductDtoFO.toEntity(dto.productDtoFO))
-				.branch(Branch.toEntity(dto.getBranchDto()))
+				//.branch(Branch.toEntity(dto.getBranchDto()))
 				.build();
 	}
 }

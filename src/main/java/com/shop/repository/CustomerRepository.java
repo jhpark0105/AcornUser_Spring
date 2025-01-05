@@ -1,6 +1,7 @@
 package com.shop.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,5 +18,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     boolean existsByCustomerShopid(String customerShopid);
     boolean existsByCustomerMail(String customerMail);
     boolean existsByCustomerTel(String customerTel);
+
+    Optional<Customer> findByCustomerNameAndCustomerTel(String customerName, String customerTel);
+
+    Optional<Customer> findByCustomerShopidAndCustomerNameAndCustomerTel(String customerShopid, String customerName, String customerTel);
 
 }

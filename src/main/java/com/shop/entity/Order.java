@@ -48,9 +48,9 @@ public class Order {
     @JoinColumn(name = "product_code", nullable = false)
     @JsonBackReference
     private Product product;
-	@ManyToOne
-	@JoinColumn(name = "branch_code")
-	@JsonBackReference
-	private Branch branch;
+	//@ManyToOne
+	//@JoinColumn(name = "branch_code")
+	//@JsonBackReference
+	//private Branch branch;
 	
 }

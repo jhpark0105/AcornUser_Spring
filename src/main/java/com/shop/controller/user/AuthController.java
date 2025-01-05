@@ -1,10 +1,10 @@
 package com.shop.controller.user;
 
-import com.shop.dto.LoginRepsonseDto;
-import com.shop.dto.LoginRequestDto;
-import com.shop.dto.SignUpRequestDto;
-import com.shop.dto.SignUpResponseDto;
+import com.shop.dto.*;
+import com.shop.entity.Customer;
 import com.shop.process.user.AuthProcess;
+import com.shop.process.user.CustomerLoginProcess;
+import com.shop.provider.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthProcess authProcess;
+    private final CustomerLoginProcess customerLoginProcess;
+    private final JwtProvider jwtProvider;
 
     // 고객 회원가입 요청 처리
     @PostMapping("/user/signup")
@@ -35,6 +37,19 @@ public class AuthController {
         ResponseEntity<? super LoginRepsonseDto> response = authProcess.login(loginRequestDto);
         return response;
     }
+
+//    // 쿠키에서 customerShopid 추출하여 customer 조회
+//    @GetMapping("/user/customername")
+//    public CustomerDto getCustomerByToken(@CookieValue(name = "accessToken") String token) {
+//        // 토큰에서 adminId(id) 추출
+//        System.out.println("Received Token: " + token);
+//        String customerShopid = jwtProvider.validate(token);
+//        System.out.println("Extracted customerShopid: " + customerShopid);
+//
+//        // 추출한 customerShopid로 customer 조회
+//        Customer customer = customerLoginProcess.findOne(customerShopid);
+//        return CustomerDto.toDto(customer);
+//    }
 
     // 로그아웃 요청 처리
     @PostMapping("/logoutProcess")
