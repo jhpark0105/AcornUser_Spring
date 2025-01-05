@@ -59,53 +59,6 @@ public class ReservationProcess {
 
 
     //예약 등록
-//    @Transactional
-//    public String insertReservation(ReservationDto reservationDto) {
-//        try {
-//            // Name으로 ID 조회
-//            Integer customerId = reservationRepository.findCustomerIdByName(reservationDto.getCustomerName());
-//            String serviceCode = reservationRepository.findServiceCodeByName(reservationDto.getServiceName());
-//            String memberId = reservationRepository.findMemberIdByName(reservationDto.getMemberName());
-//
-//            System.out.println("CustomerId: " + customerId); // 디버깅 로그 추가
-//            System.out.println("ServiceCode: " + serviceCode); // 디버깅 로그 추가
-//            System.out.println("MemberId: " + memberId); // 디버깅 로그 추가
-//
-//            if (customerId == 0 || serviceCode == null || memberId == null) {
-//                throw new IllegalArgumentException("Invalid Customer, Service, or Member name.");
-//            }
-//
-//            // 예약 정보 저장
-//            Customer customer = new Customer();
-//            customer.setCustomerId(customerId);
-//
-//            Service service = new Service();
-//            service.setServiceCode(serviceCode);
-//
-//            Member member = new Member();
-//            member.setMemberId(memberId);
-//
-//            Reservation reservation = Reservation.builder()
-//                    .reservationNo(reservationDto.getReservationNo())
-//                    .reservationDate(reservationDto.getReservationDate())
-//                    .reservationTime(reservationDto.getReservationTime())
-//                    .reservationComm(reservationDto.getReservationComm())
-//                    .reservationStatus(reservationDto.getReservationStatus())
-//                    .customer(customer)
-//                    .service(service)
-//                    .member(member)
-//                    .build();
-//
-//            reservationRepository.save(reservation);
-//
-//            return "isSuccess";
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "추가 작업 오류 : " + e.getMessage();
-//        }
-//
-//    }
-
     @Transactional
     public String insertReservation(ReservationDto reservationDto) {
         try {
