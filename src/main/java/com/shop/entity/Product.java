@@ -2,18 +2,14 @@ package com.shop.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,4 +40,8 @@ public class Product {
     @JoinColumn(name = "product_b_code", referencedColumnName = "product_b_code")
     @JsonBackReference
     private Product_B product_b;  //하나의 Product_B를 참조
+
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+    @JsonBackReference
+    private List<Wishlist> wishlistList;
 }
