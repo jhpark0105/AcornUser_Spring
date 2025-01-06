@@ -1,5 +1,6 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.shop.dto.CartDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,35 +15,29 @@ import lombok.*;
 public class Cart {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
     private Long cartId;
 
-    @Column(name = "customer_id", nullable = false)
-    private int customerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false)
+    @JsonBackReference
+    private Customer customer; // 고객 참조 (Customer 엔티티)
 
-    @Column(name = "product_code", nullable = false)
-    private String productCode;
-
-    @Column(name = "product_name", nullable = false)
-    private String productName;
-
-    @Column(name = "product_price", nullable = false)
-    private int productPrice;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_code", referencedColumnName = "product_code", nullable = false)
+    @JsonBackReference
+    private Product product; // 상품 참조 (Product 엔티티)
 
     @Column(nullable = true)
     private int quantity;
 
-
-    public static Cart toEntity(CartDto dto) {
+    public static Cart toEntity(CartDto dto, Customer customer, Product product) {
         return Cart.builder()
                 .cartId(dto.getCartId())
-                .customerId(dto.getCustomerId())
-                .productCode(dto.getProductCode())
-                .productName(dto.getProductName())
-                .productPrice(dto.getProductPrice())
+                .customer(customer)
+                .product(product)
                 .quantity(dto.getQuantity())
                 .build();
     }
-
 }

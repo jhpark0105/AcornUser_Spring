@@ -81,6 +81,10 @@ public class Customer {
 	@JsonBackReference
 	private List<Wishlist> wishlistList;
 
+	@OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
+	@JsonBackReference
+	private List<Cart> cartList;
+
 	// toEntity
 	// 클라이언트로부터 받아온 데이터를 엔티티에 저장하는 메소드
 	public static Customer toEntity(CustomerDto dto) {
