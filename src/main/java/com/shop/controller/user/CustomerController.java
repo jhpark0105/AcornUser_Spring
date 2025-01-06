@@ -5,6 +5,7 @@ import com.shop.entity.Customer;
 import com.shop.process.user.CustomerLoginProcess;
 import com.shop.provider.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customer/mypage")
+@RequestMapping("/customer")
 @CrossOrigin(origins = "http://localhost:3000")
 public class CustomerController {
 
@@ -26,14 +27,24 @@ public class CustomerController {
     private BCryptPasswordEncoder passwordEncoder;
 
     // 현재 로그인한 사용자 정보 조회
-    @GetMapping
-    public ResponseEntity<CustomerDto> getCustomerByToken(@CookieValue(name = "accessToken") String token) {
-        String customerShopid = jwtProvider.validate(token);
-        Customer customer = customerLoginProcess.findOne(customerShopid);
-        if (customer == null) {
-            return ResponseEntity.notFound().build();
+    @GetMapping("/mypage")
+    public ResponseEntity<CustomerDto> getCustomerData(
+            @CookieValue(name = "accessToken", required = false) String token) {
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 토큰이 없으면 401 응답
         }
-        return ResponseEntity.ok(CustomerDto.toDto(customer));
+
+        String customerShopid = jwtProvider.validate(token); // 토큰 검증 후 사용자 ID 반환
+        if (customerShopid == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 유효하지 않은 토큰
+        }
+
+        Customer customer = customerLoginProcess.findOne(customerShopid); // 사용자 조회
+        if (customer == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 사용자 정보가 없으면 404 응답
+        }
+
+        return ResponseEntity.ok(CustomerDto.toDto(customer)); // 사용자 정보 반환
     }
 
     // 전체 사용자 목록 조회 (관리자용)
@@ -66,8 +77,6 @@ public class CustomerController {
         // 비밀번호 처리
         if (dto.getCustomerShoppw() != null && !dto.getCustomerShoppw().isEmpty()) {
             customer.setCustomerShoppw(passwordEncoder.encode(dto.getCustomerShoppw()));
-        } else {
-            customer.setCustomerShoppw(customer.getCustomerShoppw());
         }
 
         // 사용자 정보 업데이트
