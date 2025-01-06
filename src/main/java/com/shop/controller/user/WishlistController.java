@@ -106,4 +106,24 @@ public class WishlistController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching products.");
         }
     }
+
+    //좋아요 상태를 토글
+    @PostMapping("/toggle")
+    public ResponseEntity<?> toggleWishlist(
+            @RequestParam int customerId,
+            @RequestParam String productCode) {
+        try {
+            // 좋아요 상태 토글
+            boolean isLiked = wishlistProcess.toggleWishlist(customerId, productCode);
+
+            if (isLiked) {
+                return ResponseEntity.ok("위시리스트에 추가되었습니다.");
+            } else {
+                return ResponseEntity.ok("위시리스트에서 제거되었습니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to toggle wishlist item: " + e.getMessage());
+        }
+    }
 }

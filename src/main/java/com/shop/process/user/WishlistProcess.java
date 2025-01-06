@@ -94,4 +94,29 @@ public class WishlistProcess {
                 .map(ProductDto::fromEntity) // Product 엔티티를 ProductDto로 변환
                 .collect(Collectors.toList());
     }
+
+    //좋아요 상태를 토글
+    @Transactional
+    public boolean toggleWishlist(int customerId, String productCode) {
+        // 좋아요 상태 확인
+        boolean isLiked = wishlistRepository.existsByCustomer_CustomerIdAndProduct_ProductCode(customerId, productCode);
+
+        if (isLiked) {
+            // 좋아요 취소 (삭제)
+            wishlistRepository.deleteByCustomer_CustomerIdAndProduct_ProductCode(customerId, productCode);
+            System.out.println("Wishlist item removed: customerId=" + customerId + ", productCode=" + productCode);
+            return false;
+        } else {
+            // 좋아요 추가
+            Wishlist wishlist = Wishlist.builder()
+                    .customer(Customer.builder().customerId(customerId).build())
+                    .product(Product.builder().productCode(productCode).build())
+                    .createAt(LocalDateTime.now())
+                    .build();
+
+            wishlistRepository.save(wishlist);
+            System.out.println("Wishlist item added: customerId=" + customerId + ", productCode=" + productCode);
+            return true;
+        }
+    }
 }
