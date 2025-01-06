@@ -41,7 +41,8 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 상태 없음
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 프리플라이트 요청 허용
-						.requestMatchers("/user/signup", "/user/login", "/", "/main/**", "/product/**", "/notice/**","/reservation/**","/user/**","/logoutProcess","/wishlist/**").permitAll() // 인증 없이 허용
+						.requestMatchers("/user/signup", "/user/login", "/", "/main/**", "/product/**", "/notice/**","/reservation/**","/user/**","/logoutProcess","/wishlist/**", "/cart/**").permitAll() // 인증 없이 허용
+						.requestMatchers("/comment/**").permitAll()
 						.anyRequest().authenticated() // 그 외 요청은 인증 필요
 				)
 				.exceptionHandling(ex -> ex

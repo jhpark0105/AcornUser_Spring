@@ -44,4 +44,8 @@ public class Product {
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     @JsonBackReference
     private List<Wishlist> wishlistList;
+
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+    @JsonBackReference
+    private List<Cart> cartList;
 }
