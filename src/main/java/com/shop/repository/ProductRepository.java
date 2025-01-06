@@ -26,4 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     
     @Query("SELECT p FROM Product p WHERE p.product_b.productBCode=:productBCode")
     List<Product> getProductListWithBCode(@Param("productBCode")String productBCode);
+
+    // 여러 상품 코드를 기반으로 데이터를 조회
+    List<Product> findAllByProductCodeIn(List<String> productCodes);
 }
