@@ -57,10 +57,28 @@ public class WishlistController {
     }
 
     // 위시리스트에서 상품 제거
+//    @DeleteMapping
+//    public ResponseEntity<String> removeWishlist(@RequestParam int customerId, @RequestParam String productCode) {
+//        wishlistProcess.deleteWishlist(customerId, productCode);
+//        return ResponseEntity.ok("Item removed from wishlist.");
+//    }
     @DeleteMapping
-    public ResponseEntity<String> removeWishlist(@RequestParam int customerId, @RequestParam String productCode) {
-        wishlistProcess.deleteWishlist(customerId, productCode);
-        return ResponseEntity.ok("Item removed from wishlist.");
+    public ResponseEntity<?> removeWishlist(
+            @RequestParam int customerId,
+            @RequestParam String productCode) {
+        try {
+            // 위시리스트 아이템 삭제
+            boolean isDeleted = wishlistProcess.deleteWishlist(customerId, productCode);
+
+            if (isDeleted) {
+                return ResponseEntity.ok("Item removed from wishlist.");
+            } else {
+                return ResponseEntity.badRequest().body("Wishlist item not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to remove item: " + e.getMessage());
+        }
     }
 
     // 위시리스트 상태 확인
