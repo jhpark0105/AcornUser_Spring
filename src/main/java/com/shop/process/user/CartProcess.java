@@ -35,6 +35,7 @@ public class CartProcess {
         cartRepository.save(cart);
     }
 
+    // 고객 아이디로 장바구니 불러오기
     public List<CartDto> getCartItemsByCustomerId(int customerId) {
         List<Cart> carts = cartRepository.findByCustomer_CustomerId(customerId);
         return carts.stream().map(CartDto::toDto).collect(Collectors.toList());
